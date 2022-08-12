@@ -15,13 +15,15 @@ if (isset($_POST['submit'])) {
 	$email = $_POST['email'];
 	$password = md5($_POST['password']);
 	$cpassword = md5($_POST['cpassword']);
+	$dni = $_POST['dni'];
+	$fecha_reg = date("Y-m-d");
 
 	if ($password == $cpassword) {
 		$sql = "SELECT * FROM users WHERE email='$email'";
 		$result = mysqli_query($conn, $sql);
 		if (!$result->num_rows > 0) {
-			$sql = "INSERT INTO users (username, email, password)
-					VALUES ('$username', '$email', '$password')";
+			$sql = "INSERT INTO users (username, email, password,dni,fecha_reg)
+					VALUES ('$username', '$email', '$password','$dni','$fecha_reg')";
 			$result = mysqli_query($conn, $sql);
 			if ($result) {
 				echo "<script>alert('Usuario registrado correctamente')</script>";
@@ -29,6 +31,7 @@ if (isset($_POST['submit'])) {
 				$email = "";
 				$_POST['password'] = "";
 				$_POST['cpassword'] = "";
+				$dni = "";
 			} else {
 				echo "<script>alert('Ha ocurrido un error, vuelve a intentarlo')</script>";
 			}
@@ -40,7 +43,6 @@ if (isset($_POST['submit'])) {
 		echo "<script>alert('Las contraseñas no coinciden')</script>";
 	}
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -60,10 +62,13 @@ if (isset($_POST['submit'])) {
 		<form action="" method="POST" class="login-email">
             <p class="login-text" style="font-size: 2rem; font-weight: 800;">¿Nuevo colaborador?</p>
 			<div class="input-group">
-				<input type="text" placeholder="Nombre de usuario" name="username" value="<?php echo $username; ?>" required>
+				<input type="text" placeholder="Nombres y Apellidos" name="username" value="<?php echo $username; ?>" required>
 			</div>
 			<div class="input-group">
 				<input type="email" placeholder="Correo electronico" name="email" value="<?php echo $email; ?>" required>
+			</div>
+			<div class="input-group">
+				<input type="text" placeholder="DNI" name="dni" minlength="8" maxlength="8" value="<?php echo $dni; ?>" required>
 			</div>
 			<div class="input-group">
 				<input type="password" placeholder="Contraseña" name="password" value="<?php echo $_POST['password']; ?>" required>

@@ -1,10 +1,5 @@
 <style>
-body {
-  height: 100vh;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
+
 
 .menu-bar {
   border-radius: 25px;
@@ -17,13 +12,7 @@ body {
   backdrop-filter: blur(10px);
   align-items: center;
   padding: 0 10px;
-  margin: 50px 0 0 0;
-
-  height: 80px;
-	left: 25%;
-	
 	top: 0; /* Posicionamos la cabecera pegada arriba */
-	position: absolute;
 }
 .menu-bar li {
   list-style: none;
@@ -47,9 +36,11 @@ body {
   transition: 0.2s;
   border-radius: 25px;
 }
+
 .menu-bar li:hover {
   color: black;
 }
+
 .menu-bar li:hover::before {
   background: linear-gradient(to bottom, #e8edec, #d2d1d3);
   box-shadow: 0px 3px 20px 0px black;
@@ -66,7 +57,7 @@ body {
   <li><a href="welcome.php">Usuario</a></li>
   <li><a href="platos.php">Platos</a></li>
   <li><a href="regplatos.php">Nuevo plato</a></li>
-  <li><a href="#">Pedidos</a></li>
+  <li><a href="carrito.php">Carro</a></li>
   <li><a href="#">Historial</a></li>
   <li><a href="logout.php">Cerrar Sesión</a></li>
 </ul>

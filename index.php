@@ -6,6 +6,8 @@ session_start();
 
 error_reporting(0);
 
+$_SESSION['detalle'] = array();
+
 if (isset($_SESSION['username'])) {
     header("Location: welcome.php");
 }
@@ -18,6 +20,10 @@ if (isset($_POST['submit'])) {
 	if ($result->num_rows > 0) {
 		$row = mysqli_fetch_assoc($result);
 		$_SESSION['username'] = $row['username'];
+		$_SESSION['email'] = $row['email'];
+		$_SESSION['dni'] = $row['dni'];
+		$_SESSION['fecha_reg'] = $row['fecha_reg'];
+		
 		header("Location: welcome.php");
 	} else {
 		echo "<script>alert('Correo o contraseña errónea')</script>";

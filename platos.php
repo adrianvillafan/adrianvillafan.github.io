@@ -1,5 +1,4 @@
 <?php 
-
 session_start();
 
 include("config.php");
@@ -8,7 +7,6 @@ $platos = "SELECT * FROM platos";
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
 }
-
 ?>
 
 <!doctype html>
@@ -31,15 +29,16 @@ if (!isset($_SESSION['username'])) {
 
     <title>Platos</title>
   </head>
+
   <style>
 
     .container {
         max-width: 768px;
-        /*padding-top: 25rem;*/
+       
+        
     }
 
     body {
-
     width: 100%;
     min-height: 100vh;
     background-image: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url(bg.jpg);
@@ -48,22 +47,23 @@ if (!isset($_SESSION['username'])) {
     display: flex;
     justify-content: center;
     align-items: center;
-  
     }
+
   </style>
   <body>
 
-    <header> <?php include 'options.html'; ?> </header>
+    <header style="top: 0;
+    justify-content: center;
+    margin: 50px auto 0 auto;
+    position: absolute;" > <?php include 'options.html'; ?> </header>
     <br>
   
 
-  <div style="padding-top: 25rem;",class="content">
+  <div class="content">
     
-    <div class="container">
-      <h2 class="mb-5">Platos</h2>
-      
+    <div class="container">      
 
-      <div class="table-responsive custom-table-responsive">
+      <div style="max-height: 550px;" class="table-responsive custom-table-responsive">
 
         <table class="table custom-table">
           <thead>
@@ -80,12 +80,12 @@ if (!isset($_SESSION['username'])) {
               <th scope="col">Nombre</th>
               <th scope="col">Tipo</th>
               <th scope="col">Tiempo</th>
-              <th scope="col">Edición</th>
+              <th scope="col">Precio</th>
             </tr>
           </thead>
 
           <?php $resultado = mysqli_query($conn, $platos);
-          while($row=mysqli_fetch_assoc($resultado)) { ?>
+          while($row=mysqli_fetch_assoc($resultado) and $row['eliminado']==0) { ?>
 
           <tbody>
             <tr scope="row">
@@ -106,10 +106,16 @@ if (!isset($_SESSION['username'])) {
                 <!-- <small class="d-block">Far far away, behind the word mountains</small> -->
               </td>
               <td>
-                <?php echo $row['tiempo'];?>
+                <?php echo $row['tiempo'];?> min.
               </td>
               <td>
-                NY University
+                $ <?php echo $row['precio'];?>
+              </td>
+              <td>
+                <a href="platos/actualizar.php?id=<?php echo $row['id'] ?>" class="btn btn-info">Editar</a>
+              </td>
+              <td>
+                <a href="platos/delete.php?id=<?php echo $row['id'] ?>" class="btn btn-danger">Eliminar</a>
               </td>
             </tr>
             
