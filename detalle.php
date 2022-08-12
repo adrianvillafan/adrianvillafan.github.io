@@ -47,14 +47,14 @@
 	        <tr>
 	        	<td><?php echo $detalle['producto'];?></td>
 	            <td><?php echo $detalle['cantidad'];?></td>
-	            <td><?php echo $detalle['precio'];?></td>
-				<td><?php echo $detalle['subtotal'];?></td>
+	            <td>$<?php echo $detalle['precio'];?></td>
+				<td>$<?php echo $detalle['subtotal'];?></td>
 	            <td><button type="button" class="btn btn-sm btn-danger eliminar-producto" id="<?php echo $detalle['id'];?>">Eliminar</button></td>
 	        </tr>
 	        <?php }?>
 	        <tr>
 	        	<td colspan="3" class="text-right">Total</td>
-	        	<td><?php echo $total;?></td>
+	        	<td>$<?php echo $total;?></td>
 	        	<td></td>
 	        </tr>
 	    </tbody>

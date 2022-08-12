@@ -133,8 +133,8 @@ $resultado_producto = $objProducto->get();
 					        <tr>
 					        	<td><?php echo $detalle['producto'];?> </td>
 					            <td><?php echo $detalle['cantidad'];?> </td>
-					            <td><?php echo $detalle['precio'];?> </td>
-					            <td><?php echo $detalle['subtotal'];?> </td>
+					            <td>$<?php echo $detalle['precio'];?> </td>
+					            <td>$<?php echo $detalle['subtotal'];?> </td>
 					            <td><button type="button" class="btn btn-sm btn-danger eliminar-producto" id="<?php echo $detalle['id'];?>">Eliminar</button></td>
 					        </tr>
 					        <?php }?>

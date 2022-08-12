@@ -1,5 +1,17 @@
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="platos/fonts/icomoon/style.css">
+
+	<link rel="stylesheet" href="platos/css/owl.carousel.min.css">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="platos/css/bootstrap.min.css">
+
+	<!-- Style -->
+	<link rel="stylesheet" href="platos/css/style.css">
 	<title>Carrito</title>
 
 	<link href="libs/css/bootstrap.css" rel="stylesheet">
@@ -26,7 +38,7 @@
 @session_start();
 ?>
 <?php if(count($_SESSION['detalle'])>0){?>
-	<table class="table">
+	<table class="table custom-table">
 	    <thead>
 	        <tr>
 	            <th>Descripcion</th>
@@ -45,18 +57,17 @@
 	        <tr>
 	        	<td><?php echo $detalle['producto'];?></td>
 	            <td><?php echo $detalle['cantidad'];?></td>
-	            <td><?php echo $detalle['precio'];?></td>
-				<td><?php echo $detalle['subtotal'];?></td>
+	            <td>$<?php echo $detalle['precio'];?></td>
+				<td>$<?php echo $detalle['subtotal'];?></td>
 	            <td><button type="button" class="btn btn-sm btn-danger eliminar-producto" id="<?php echo $detalle['id'];?>">Eliminar</button></td>
 
-	            <td><a href="index.php"><button type="button" class="btn btn-primary "><font size="" color="" face="">Volver</font></button></a></td>
 
 
 	        </tr>
 	        <?php }?>
 	        <tr>
 	        	<td colspan="3" class="text-right">Total</td>
-	        	<td><?php echo $total;?></td>
+	        	<td>$<?php echo $total;?></td>
 	        	<td></td>
 	        </tr>
 	    </tbody>
@@ -68,7 +79,7 @@
 <br>
 <br>
 
-<input type="text" name="descripción" placeholder="Descripción" required>
+<input type="text" name="descripcion" placeholder="Descripción" required>
 
 <input type="text" name="cantidad" placeholder="Cantidad" required>
 
