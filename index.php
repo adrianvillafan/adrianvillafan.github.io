@@ -19,10 +19,12 @@ if (isset($_POST['submit'])) {
 	$result = mysqli_query($conn, $sql);
 	if ($result->num_rows > 0) {
 		$row = mysqli_fetch_assoc($result);
+		$_SESSION['id'] = $row['id'];
 		$_SESSION['username'] = $row['username'];
 		$_SESSION['email'] = $row['email'];
 		$_SESSION['dni'] = $row['dni'];
 		$_SESSION['fecha_reg'] = $row['fecha_reg'];
+		$_SESSION['resumen'] = $row['resumen'];
 		
 		header("Location: welcome.php");
 	} else {

@@ -161,18 +161,27 @@ if (!isset($_SESSION['username'])) {
 
 		<div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
 			<div class="card p-4">
-				<div class=" image d-flex flex-column justify-content-center align-items-center"> <button
-						class="btn btn-secondary"> <img src="https://i.imgur.com/wvxPV9S.png" height="100"
-							width="100" style="display: inline;" /></button> <span><i class="fa fa-copy"></i></span><span class="name mt-3"><?php echo "<h1>Bienvenido " . $_SESSION['username'] . "</h1>"; ?></span> <span
-						class="idd"><?php echo $_SESSION['email']; ?></span>
+				<div class=" image d-flex flex-column justify-content-center align-items-center"> 
+					<form method="post" action="fotos_user/cargar.php?id=<?php echo $_SESSION['id'] ?>" enctype="multipart/form-data" class="image d-flex flex-column justify-content-center align-items-center">
+						<div>	
+								<label for="image" class="btn btn-secondary">
+								<input class="btn btn-secondary" type="file" id="image" name="image" style="opacity: 0;display: none;">
+								<img src='fotos_user/vista.php?id=<?php echo $_SESSION['id'];?>' style="display: inline; max-height:125px; border-radius: 50%; padding: 6px 0 0 0px; margin:0;" />
+								</label>
+						</div>
+							<button type="submit" name="submit"><i class="fa fa-copy"></i></button>
+					</form>
+							
+							<span class="name mt-3"><?php echo "<h1>Bienvenido " . $_SESSION['username'] . "</h1>"; ?></span> 
+
+							<span class="idd"><?php echo $_SESSION['email']; ?></span>
 					<div class="d-flex flex-row justify-content-center align-items-center gap-2"> <span
 							class="idd1"><?php echo $_SESSION['dni']; ?></span> </div>
 					<!--<div class="d-flex flex-row justify-content-center align-items-center mt-3"> <span class="number">1069 <span
 								class="follow">Followers</span></span> </div>-->
 								<br/>
-					<div class=" d-flex mt-2"> <button class="btn1 btn-dark">Edit Profile</button> </div>
-					<div class="text mt-3"> <span>Eleanor Pena is a creator of minimalistic x bold graphics and digital
-							artwork.<br><br> Artist/ Creative Director by Day #NFT minting@ with FND night. </span> </div>
+					<div class=" d-flex mt-2"> <button class="btn1 btn-dark"><a href="usuarios/actualizar.php?id=<?php echo $_SESSION['id'] ?>">Editar Perfil</a></button> </div>
+					<div class="text mt-3"> <span> <?php echo $_SESSION['resumen']; ?> </span> </div>
 					<div class="gap-3 mt-3 icons d-flex flex-row justify-content-center align-items-center"> <span><i
 								class="fa fa-twitter"></i></span> <span><i class="fa fa-facebook-f"></i></span> <span><i
 								class="fa fa-instagram"></i></span> <span><i class="fa fa-linkedin"></i></span> </div>

@@ -2,7 +2,7 @@
 session_start();
 
 include("config.php");
-$platos = "SELECT * FROM platos";
+$datos = "SELECT * FROM datos";
 
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
@@ -27,14 +27,13 @@ if (!isset($_SESSION['username'])) {
     <!-- Style -->
     <link rel="stylesheet" href="platos/css/style.css">
 
-    <title>Platos</title>
+    <title>Datos</title>
   </head>
 
   <style>
 
     .container {
         max-width: 768px;
-        padding-top: 8rem;
        
         
     }
@@ -76,16 +75,14 @@ if (!isset($_SESSION['username'])) {
                   <div class="control__indicator"></div>
                 </label>
               </th>
-              
-              <th scope="col">ID</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Tiempo</th>
-              <th scope="col">Precio</th>
+              <th scope="col">Cant.</th>
+              <th scope="col">Precio und.</th>
+              <th scope="col">Precio Total</th>
             </tr>
           </thead>
 
-          <?php $resultado = mysqli_query($conn, $platos);
+          <?php $resultado = mysqli_query($conn, $datos);
           while($row=mysqli_fetch_assoc($resultado) and $row['eliminado']==0) { ?>
 
           <tbody>
@@ -97,20 +94,17 @@ if (!isset($_SESSION['username'])) {
                 </label>
               </th>
               <td>
-                <?php echo $row['id']; ?>
+                <?php echo $row['descripcion'];?>
               </td>
               <td>
-                <?php echo $row['nombre'];?>
-              </td>
-              <td>
-                <?php echo $row['tipo'];?>
+                <?php echo $row['cantidad'];?>
                 <!-- <small class="d-block">Far far away, behind the word mountains</small> -->
               </td>
               <td>
-                <?php echo $row['tiempo'];?> min.
+                $<?php echo $row['precio'];?>
               </td>
               <td>
-                $ <?php echo $row['precio'];?>
+                $ <?php echo $row['subtotal'];?>
               </td>
               <td>
                 <a href="platos/actualizar.php?id=<?php echo $row['id'] ?>" class="btn btn-info">Editar</a>
