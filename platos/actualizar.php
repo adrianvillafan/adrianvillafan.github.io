@@ -22,14 +22,16 @@ $row=mysqli_fetch_array($query);
     </head>
     <body>
                 <div class="container mt-5">
-                    <form action="update.php" method="POST">
+                    <form action="update.php" enctype="multipart/form-data" method="POST">
                     
                                 <input type="hidden" name="id" value="<?php echo $row['id']  ?>">
                                 
                                 <input type="text" class="form-control mb-3" name="nombre" placeholder="nombre" value="<?php echo $row['nombre']  ?>">
+                                <input type="text" class="form-control mb-3" name="descripcion" placeholder="descripcion" value="<?php echo $row['descripcion']  ?>">
                                 <input type="text" class="form-control mb-3" name="tipo" placeholder="tipo" value="<?php echo $row['tipo']  ?>">
                                 <input type="text" class="form-control mb-3" name="tiempo" placeholder="tiempo" value="<?php echo $row['tiempo']  ?>">
                                 <input type="text" class="form-control mb-3" name="precio" placeholder="precio" value="<?php echo $row['precio']  ?>">
+                                
                                 
                             <input type="submit" class="btn btn-primary btn-block" value="Actualizar">
                     </form>

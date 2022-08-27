@@ -70,14 +70,7 @@ if (!isset($_SESSION['username'])) {
           <thead>
             <tr>  
 
-              <th scope="col">
-                <label class="control control--checkbox">
-                  <input type="button" , href="" />
-                  <div class="control__indicator"></div>
-                </label>
-              </th>
-              
-              <th scope="col">ID</th>
+              <th scope="col">Imagen</th>
               <th scope="col">Nombre</th>
               <th scope="col">Tipo</th>
               <th scope="col">Tiempo</th>
@@ -89,22 +82,26 @@ if (!isset($_SESSION['username'])) {
           while($row=mysqli_fetch_assoc($resultado) and $row['eliminado']==0) { ?>
 
           <tbody>
-            <tr scope="row">
-              <th scope="row">
-                <label class="control control--checkbox">
-                  <input type="checkbox"/>
-                  <div class="control__indicator"></div>
-                </label>
-              </th>
+            
+              
               <td>
-                <?php echo $row['id']; ?>
+                
+                  <div>	
+                      <label for="image" class="btn btn-secondary">
+                      <a href="fotos_platos/fotoplato.php?id=<?php echo $row['id'];?>">
+                        <img src='fotos_platos/vista.php?id=<?php echo $row['id'];?>' style="display: inline; max-height:125px; border-radius: 50%; padding: 6px 0 0 0px; margin:0;" />
+                      </a>
+                      
+                      </label>
+                  </div>
+                    
               </td>
               <td>
                 <?php echo $row['nombre'];?>
               </td>
               <td>
                 <?php echo $row['tipo'];?>
-                <!-- <small class="d-block">Far far away, behind the word mountains</small> -->
+                <small class="d-block"><?php echo $row['descripcion'];?></small>
               </td>
               <td>
                 <?php echo $row['tiempo'];?> min.

@@ -2,6 +2,8 @@
 
 include("../config.php");
 
+$fotico = $_POST['id'];
+
 if(isset($_POST["submit"])){
     $revisar = getimagesize($_FILES["image"]["tmp_name"]);
     if($revisar !== false){
@@ -14,11 +16,11 @@ if(isset($_POST["submit"])){
         }
         
         //Insertar imagen en la base de datos
-        //$fotico=$_SESSION['id'];
-        $insertar = $conn->query("UPDATE users SET `foto`='$imgContenido' WHERE `id` = {$_GET['id']}");
+        
+        $insertar = $conn->query("UPDATE platos SET foto = '$imgContenido' WHERE id = {$_GET['id']}");
         // COndicional para verificar la subida del fichero
         if($insertar){
-            Header("Location: ../welcome.php");
+            Header("Location: ../platos.php");
         }else{
             echo "Ha fallado la subida, reintente nuevamente.";
         } 

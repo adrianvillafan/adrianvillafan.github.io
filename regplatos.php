@@ -12,6 +12,7 @@ if (!isset($_SESSION['username'])) {
 
 if (isset($_POST['submit'])) {
 	$nombre = $_POST['nombre'];
+	$descripcion = $_POST['descripcion'];
 	$tipo = $_POST['tipo'];
 	$tiempo = $_POST['tiempo'];
 	$precio = $_POST['precio'];
@@ -22,6 +23,7 @@ if (isset($_POST['submit'])) {
 	if ($result) {
 		echo "<script>alert('Plato registrado correctamente')</script>";
 		$nombre = "";
+		$descripcion = "";
 		$tipo = "";
 		$tiempo = "";
 		$precio = "";
@@ -63,8 +65,12 @@ if (isset($_POST['submit'])) {
 				<input type="text" placeholder="Nombre" name="nombre" value="<?php echo $nombre; ?>" required>
 			</div>
 
-			<div name="cbo_producto" id="cbo_producto" class="col-md-2 form-control">
-				<select name="tipo" value="<?php echo $tipo; ?>"><option>frio</option><option>caliente</option></select>
+			<div class="input-group">
+				<input type="text" placeholder="Descripción" name="descripcion" value="<?php echo $descripcion; ?>" required>
+			</div>
+
+			<div  class="input-group">
+				<select style="width: 100%; height: 100%; border: 2px solid #e7e7e7; padding: 10px 20px;font-size: 1rem; border-radius: 30px; background: transparent; outline: none; transition: .3s;" class="input-group" name="tipo" value="<?php echo $tipo; ?>"><option class='form-control'>frio</option><option class='form-control'>caliente</option></select>
 				
 			</div>
 

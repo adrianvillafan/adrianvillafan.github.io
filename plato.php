@@ -3,7 +3,7 @@
 class Plato
 {
 	function get(){
-		$sql = "SELECT * FROM platos";
+		$sql = "SELECT * FROM platos WHERE eliminado = 0";
 		global $cnx;
 		return $cnx->query($sql);
 	}
