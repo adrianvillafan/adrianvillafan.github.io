@@ -75,10 +75,11 @@ if (!isset($_SESSION['username'])) {
                   <div class="control__indicator"></div>
                 </label>
               </th>
+              <th scope="col">ID</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Cant.</th>
-              <th scope="col">Precio und.</th>
-              <th scope="col">Precio Total</th>
+              <th scope="col">DNI</th>
+              <th scope="col">Monto</th>
+              <th scope="col">Email</th>
             </tr>
           </thead>
 
@@ -94,23 +95,20 @@ if (!isset($_SESSION['username'])) {
                 </label>
               </th>
               <td>
-                <?php echo $row['descripcion'];?>
+                <?php echo $row['id'];?>
               </td>
               <td>
-                <?php echo $row['cantidad'];?>
+                <?php echo $row['nombre_c'];?>
+              </td>
+              <td>
+                <?php echo $row['dni'];?>
                 <!-- <small class="d-block">Far far away, behind the word mountains</small> -->
               </td>
               <td>
                 $<?php echo $row['precio'];?>
               </td>
               <td>
-                $ <?php echo $row['subtotal'];?>
-              </td>
-              <td>
-                <a href="platos/actualizar.php?id=<?php echo $row['id'] ?>" class="btn btn-info">Editar</a>
-              </td>
-              <td>
-                <a href="platos/delete.php?id=<?php echo $row['id'] ?>" class="btn btn-danger">Eliminar</a>
+                <?php echo $row['email'];?>
               </td>
             </tr>
             

@@ -79,13 +79,13 @@
 <br>
 <br>
 
-<input type="text" name="descripcion" placeholder="Descripción" required>
+<input type="text" name="nombre_c" placeholder="Nombre de Cliente" required>
 
-<input type="text" name="cantidad" placeholder="Cantidad" required>
+<input type="text" name="dni" placeholder="DNI" required>
 
-<input type="text" name="precio" placeholder="Precio" required>
+<input type="text" name="precio" placeholder="Precio" value=<?php echo $total;?> required>
 
-<input type="text" name="subtotal" placeholder="Subtotal" required>
+<input type="email" name="email" placeholder="Email" required>
 
 <br>
 <br>
