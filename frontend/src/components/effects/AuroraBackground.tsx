@@ -9,6 +9,8 @@ export const AuroraBackground: React.FC = React.memo(() => {
         overflow: 'hidden',
         pointerEvents: 'none',
         zIndex: 0,
+        opacity: 'var(--aurora-opacity, 1)' as any,
+        transition: 'opacity 0.4s ease',
       }}
     >
       {/* Aurora Blob 1 - Indigo Glow */}

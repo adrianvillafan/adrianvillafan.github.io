@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { motion } from 'motion/react'
-import { personalInfo } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { TiltCard } from '@/components/effects/TiltCard'
@@ -10,6 +10,7 @@ import { FaWhatsapp, FaLinkedin, FaGithub } from 'react-icons/fa'
 
 const Contact: React.FC = () => {
   const sectionRef = useSectionObserver('contact')
+  const { personalInfo } = usePortfolioData()
   const [copied, setCopied] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
@@ -18,7 +19,7 @@ const Contact: React.FC = () => {
     navigator.clipboard.writeText(personalInfo.email)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }, [])
+  }, [personalInfo.email])
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -30,7 +31,7 @@ const Contact: React.FC = () => {
       window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`
       setFormSubmitted(true)
     },
-    [formData]
+    [formData, personalInfo.email]
   )
 
   return (
@@ -41,9 +42,9 @@ const Contact: React.FC = () => {
     >
       <div className="container">
         <SectionTitle
-          badge="Contacto"
-          title="¿Listo para Construir Algo Extraordinario?"
-          subtitle="Estoy disponible para nuevos proyectos, consultorías o integración a equipos de ingeniería de alto impacto."
+          badge={personalInfo.contact.badge}
+          title={personalInfo.contact.title}
+          subtitle={personalInfo.contact.subtitle}
         />
 
         <div
@@ -71,7 +72,7 @@ const Contact: React.FC = () => {
                     color: 'var(--text-primary)',
                   }}
                 >
-                  Información Directa
+                  {personalInfo.contact.directTitle}
                 </h3>
                 <p
                   style={{
@@ -81,7 +82,7 @@ const Contact: React.FC = () => {
                     marginBottom: '2rem',
                   }}
                 >
-                  Conversemos sobre tu visión, requerimientos técnicos o desafíos de ingeniería. Puedes escribirme directamente a través de cualquiera de estos canales:
+                  {personalInfo.contact.directDescription}
                 </p>
 
                 <div
@@ -99,7 +100,7 @@ const Contact: React.FC = () => {
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       padding: '0.9rem 1.15rem',
-                      background: 'rgba(255, 255, 255, 0.03)',
+                      background: 'var(--pill-bg)',
                       borderRadius: '12px',
                       border: '1px solid var(--border-subtle)',
                       gap: '0.5rem',
@@ -108,7 +109,9 @@ const Contact: React.FC = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
                       <FiMail size={18} color="var(--accent-light)" />
                       <div>
-                        <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Email</div>
+                        <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                          {personalInfo.contact.emailLabel}
+                        </div>
                         <a
                           href={`mailto:${personalInfo.email}`}
                           style={{
@@ -123,7 +126,7 @@ const Contact: React.FC = () => {
                     </div>
                     <button
                       onClick={handleCopyEmail}
-                      title="Copiar correo"
+                      title={personalInfo.contact.copy}
                       style={{
                         padding: '0.4rem 0.75rem',
                         borderRadius: '8px',
@@ -138,7 +141,7 @@ const Contact: React.FC = () => {
                       }}
                     >
                       {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
-                      <span>{copied ? 'Copiado' : 'Copiar'}</span>
+                      <span>{copied ? personalInfo.contact.copied : personalInfo.contact.copy}</span>
                     </button>
                   </div>
 
@@ -161,7 +164,7 @@ const Contact: React.FC = () => {
                     <FaWhatsapp size={22} color="#25D366" />
                     <div>
                       <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                        WhatsApp Directo
+                        {personalInfo.contact.whatsappLabel}
                       </div>
                       <div style={{ fontSize: '0.94rem', fontWeight: 600, color: '#34d399' }}>
                         {personalInfo.phone}
@@ -176,16 +179,18 @@ const Contact: React.FC = () => {
                       alignItems: 'center',
                       gap: '0.85rem',
                       padding: '0.9rem 1.15rem',
-                      background: 'rgba(255, 255, 255, 0.03)',
+                      background: 'var(--pill-bg)',
                       borderRadius: '12px',
                       border: '1px solid var(--border-subtle)',
                     }}
                   >
                     <FiMapPin size={18} color="var(--accent-light)" />
                     <div>
-                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>Ubicación</div>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                        {personalInfo.contact.locationLabel}
+                      </div>
                       <div style={{ fontSize: '0.92rem', fontWeight: 500, color: 'var(--text-primary)' }}>
-                        {personalInfo.location} (Modalidad Remota / Híbrida)
+                        {personalInfo.contact.locationValue}
                       </div>
                     </div>
                   </div>
@@ -231,7 +236,7 @@ const Contact: React.FC = () => {
                     color: 'var(--text-primary)',
                   }}
                 >
-                  Envíame un Mensaje
+                  {personalInfo.contact.formTitle}
                 </h3>
 
                 {formSubmitted ? (
@@ -259,9 +264,11 @@ const Contact: React.FC = () => {
                     >
                       <FiCheck size={26} />
                     </div>
-                    <h4 style={{ fontSize: '1.2rem', fontWeight: 600 }}>¡Mensaje Listo!</h4>
+                    <h4 style={{ fontSize: '1.2rem', fontWeight: 600 }}>
+                      {personalInfo.contact.formSuccessTitle}
+                    </h4>
                     <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', maxWidth: '380px' }}>
-                      Se ha abierto tu cliente de correo para enviar la comunicación directamente a {personalInfo.email}.
+                      {personalInfo.contact.formSuccessMessage}
                     </p>
                     <Button
                       size="sm"
@@ -269,7 +276,7 @@ const Contact: React.FC = () => {
                       onClick={() => setFormSubmitted(false)}
                       style={{ marginTop: '0.5rem' }}
                     >
-                      Enviar otro mensaje
+                      {personalInfo.contact.sendAnother}
                     </Button>
                   </div>
                 ) : (
@@ -291,19 +298,19 @@ const Contact: React.FC = () => {
                           marginBottom: '0.45rem',
                         }}
                       >
-                        Nombre Completo
+                        {personalInfo.contact.nameLabel}
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="Ej. Juan Pérez"
+                        placeholder={personalInfo.contact.namePlaceholder}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         style={{
                           width: '100%',
                           padding: '0.8rem 1rem',
                           borderRadius: '10px',
-                          background: 'rgba(255, 255, 255, 0.04)',
+                          background: 'var(--input-bg)',
                           border: '1px solid var(--border-subtle)',
                           color: 'var(--text-primary)',
                           fontSize: '0.92rem',
@@ -322,19 +329,19 @@ const Contact: React.FC = () => {
                           marginBottom: '0.45rem',
                         }}
                       >
-                        Correo Electrónico
+                        {personalInfo.contact.emailInputLabel}
                       </label>
                       <input
                         type="email"
                         required
-                        placeholder="tu@correo.com"
+                        placeholder={personalInfo.contact.emailPlaceholder}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         style={{
                           width: '100%',
                           padding: '0.8rem 1rem',
                           borderRadius: '10px',
-                          background: 'rgba(255, 255, 255, 0.04)',
+                          background: 'var(--input-bg)',
                           border: '1px solid var(--border-subtle)',
                           color: 'var(--text-primary)',
                           fontSize: '0.92rem',
@@ -353,19 +360,19 @@ const Contact: React.FC = () => {
                           marginBottom: '0.45rem',
                         }}
                       >
-                        Mensaje / Proyecto
+                        {personalInfo.contact.messageLabel}
                       </label>
                       <textarea
                         required
                         rows={4}
-                        placeholder="Cuéntame sobre tu proyecto, consulta o requerimiento técnico..."
+                        placeholder={personalInfo.contact.messagePlaceholder}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         style={{
                           width: '100%',
                           padding: '0.8rem 1rem',
                           borderRadius: '10px',
-                          background: 'rgba(255, 255, 255, 0.04)',
+                          background: 'var(--input-bg)',
                           border: '1px solid var(--border-subtle)',
                           color: 'var(--text-primary)',
                           fontSize: '0.92rem',
@@ -382,7 +389,7 @@ const Contact: React.FC = () => {
                       fullWidth
                       icon={<FiSend size={16} />}
                     >
-                      Enviar Mensaje
+                      {personalInfo.contact.submitButton}
                     </Button>
                   </form>
                 )}

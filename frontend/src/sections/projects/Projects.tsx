@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { projects } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { ProjectItem } from '@/types'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -10,22 +10,20 @@ import { Button } from '@/components/ui/Button'
 import { ProjectModal } from './ProjectModal'
 import { FiExternalLink, FiGithub, FiCheckCircle, FiInfo } from 'react-icons/fi'
 
-type FilterCategory = 'Todos' | 'Full Stack' | 'Data & AI' | 'Microservices & Cloud' | 'Systems & Automation'
-
-const filterCategories: FilterCategory[] = [
-  'Todos',
-  'Full Stack',
-  'Data & AI',
-  'Microservices & Cloud',
-  'Systems & Automation',
-]
+interface ProjectLabels {
+  featuredBadge: string
+  viewArchitecture: string
+  liveDemo: string
+  code: string
+}
 
 // ProjectCard memoizado con 3D Tilt
 const ProjectCard: React.FC<{
   project: ProjectItem
   index: number
+  labels: ProjectLabels
   onOpenDetails: (project: ProjectItem) => void
-}> = React.memo(({ project, index, onOpenDetails }) => {
+}> = React.memo(({ project, index, labels, onOpenDetails }) => {
   return (
     <motion.div
       layout
@@ -71,7 +69,7 @@ const ProjectCard: React.FC<{
                     fontWeight: 500,
                   }}
                 >
-                  Destacado
+                  {labels.featuredBadge}
                 </span>
               )}
             </div>
@@ -118,7 +116,7 @@ const ProjectCard: React.FC<{
                 alignItems: 'flex-start',
                 gap: '0.5rem',
                 padding: '0.75rem 0.85rem',
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--pill-bg)',
                 borderRadius: '8px',
                 border: '1px solid var(--border-subtle)',
                 marginBottom: '1.25rem',
@@ -166,7 +164,7 @@ const ProjectCard: React.FC<{
                 icon={<FiInfo size={14} />}
                 onClick={() => onOpenDetails(project)}
               >
-                Ver Arquitectura
+                {labels.viewArchitecture}
               </Button>
 
               <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -177,7 +175,7 @@ const ProjectCard: React.FC<{
                     icon={<FiExternalLink size={14} />}
                     onClick={() => window.open(project.demoUrl, '_blank')}
                   >
-                    Demo
+                    {labels.liveDemo}
                   </Button>
                 )}
                 {project.githubUrl && (
@@ -187,7 +185,7 @@ const ProjectCard: React.FC<{
                     icon={<FiGithub size={14} />}
                     onClick={() => window.open(project.githubUrl, '_blank')}
                   >
-                    Código
+                    {labels.code}
                   </Button>
                 )}
               </div>
@@ -203,11 +201,38 @@ ProjectCard.displayName = 'ProjectCard'
 
 const Projects: React.FC = () => {
   const sectionRef = useSectionObserver('projects')
-  const [activeCategory, setActiveCategory] = useState<FilterCategory>('Todos')
+  const { personalInfo, projectsList } = usePortfolioData()
+  const [activeCategoryKey, setActiveCategoryKey] = useState<string>('ALL')
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null)
 
-  const handleFilterChange = useCallback((cat: FilterCategory) => {
-    setActiveCategory(cat)
+  const filterCategories = useMemo(
+    () => [
+      { key: 'ALL', label: personalInfo.projects.filterAll },
+      { key: 'Full Stack', label: 'Full Stack' },
+      { key: 'Data & AI', label: 'Data & AI' },
+      { key: 'Microservices & Cloud', label: 'Microservices & Cloud' },
+      { key: 'Systems & Automation', label: 'Systems & Automation' },
+    ],
+    [personalInfo.projects.filterAll]
+  )
+
+  const cardLabels = useMemo(
+    () => ({
+      featuredBadge: personalInfo.projects.featuredBadge,
+      viewArchitecture: personalInfo.projects.viewArchitecture,
+      liveDemo: personalInfo.projects.liveDemo,
+      code: personalInfo.projects.code,
+    }),
+    [
+      personalInfo.projects.featuredBadge,
+      personalInfo.projects.viewArchitecture,
+      personalInfo.projects.liveDemo,
+      personalInfo.projects.code,
+    ]
+  )
+
+  const handleFilterChange = useCallback((catKey: string) => {
+    setActiveCategoryKey(catKey)
   }, [])
 
   const handleOpenDetails = useCallback((project: ProjectItem) => {
@@ -220,9 +245,9 @@ const Projects: React.FC = () => {
 
   // Filtrado memoizado
   const filteredProjects = useMemo(() => {
-    if (activeCategory === 'Todos') return projects
-    return projects.filter((p) => p.category === activeCategory)
-  }, [activeCategory])
+    if (activeCategoryKey === 'ALL') return projectsList
+    return projectsList.filter((p) => p.category === activeCategoryKey)
+  }, [activeCategoryKey, projectsList])
 
   return (
     <section
@@ -232,9 +257,9 @@ const Projects: React.FC = () => {
     >
       <div className="container">
         <SectionTitle
-          badge="Proyectos & Soluciones"
-          title="Casos de Estudio & Arquitecturas Desarrolladas"
-          subtitle="Sistemas reales orientados a escalabilidad, visión computacional, pipelines de datos y almacenamiento distribuido seguro."
+          badge={personalInfo.projects.badge}
+          title={personalInfo.projects.title}
+          subtitle={personalInfo.projects.subtitle}
         />
 
         {/* Filter Pills */}
@@ -248,11 +273,11 @@ const Projects: React.FC = () => {
           }}
         >
           {filterCategories.map((cat) => {
-            const isSelected = activeCategory === cat
+            const isSelected = activeCategoryKey === cat.key
             return (
               <button
-                key={cat}
-                onClick={() => handleFilterChange(cat)}
+                key={cat.key}
+                onClick={() => handleFilterChange(cat.key)}
                 style={{
                   padding: '0.45rem 1.15rem',
                   borderRadius: '9999px',
@@ -261,7 +286,7 @@ const Projects: React.FC = () => {
                   transition: 'all 0.2s ease',
                   background: isSelected
                     ? 'var(--accent)'
-                    : 'rgba(255, 255, 255, 0.05)',
+                    : 'var(--pill-bg)',
                   color: isSelected ? '#ffffff' : 'var(--text-secondary)',
                   border: isSelected
                     ? '1px solid var(--accent-light)'
@@ -271,7 +296,7 @@ const Projects: React.FC = () => {
                     : 'none',
                 }}
               >
-                {cat}
+                {cat.label}
               </button>
             )
           })}
@@ -291,6 +316,7 @@ const Projects: React.FC = () => {
                 key={project.id}
                 project={project}
                 index={idx}
+                labels={cardLabels}
                 onOpenDetails={handleOpenDetails}
               />
             ))}

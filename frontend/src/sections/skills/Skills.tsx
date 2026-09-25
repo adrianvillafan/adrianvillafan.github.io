@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'motion/react'
-import { skillCategories } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { TiltCard } from '@/components/effects/TiltCard'
@@ -31,7 +31,7 @@ const SkillPill: React.FC<{ name: string; level: string; highlight?: boolean }> 
           justifyContent: 'space-between',
           padding: '0.7rem 0.95rem',
           borderRadius: '10px',
-          background: highlight ? 'rgba(99, 102, 241, 0.08)' : 'rgba(255, 255, 255, 0.025)',
+          background: highlight ? 'rgba(99, 102, 241, 0.1)' : 'var(--pill-bg)',
           border: highlight
             ? '1px solid rgba(99, 102, 241, 0.28)'
             : '1px solid var(--border-subtle)',
@@ -41,8 +41,8 @@ const SkillPill: React.FC<{ name: string; level: string; highlight?: boolean }> 
         <span
           style={{
             fontSize: '0.88rem',
-            fontWeight: highlight ? 600 : 500,
-            color: highlight ? '#ffffff' : 'var(--text-secondary)',
+            fontWeight: highlight ? 700 : 500,
+            color: highlight ? 'var(--text-primary)' : 'var(--text-secondary)',
           }}
         >
           {name}
@@ -65,6 +65,7 @@ SkillPill.displayName = 'SkillPill'
 
 const Skills: React.FC = () => {
   const sectionRef = useSectionObserver('skills')
+  const { personalInfo, skillCategories } = usePortfolioData()
 
   return (
     <section
@@ -75,9 +76,9 @@ const Skills: React.FC = () => {
     >
       <div className="container">
         <SectionTitle
-          badge="Habilidades Técnicas"
-          title="Stack Tecnológico & Especialidades"
-          subtitle="Conjunto integral de herramientas y lenguajes para ingeniería de software full-stack, automatización de datos y operaciones en la nube."
+          badge={personalInfo.skills.badge}
+          title={personalInfo.skills.title}
+          subtitle={personalInfo.skills.subtitle}
         />
 
         <div

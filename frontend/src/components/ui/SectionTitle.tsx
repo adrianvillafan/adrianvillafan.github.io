@@ -43,7 +43,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = React.memo(
             fontWeight: 700,
             letterSpacing: '-0.025em',
             lineHeight: 1.15,
-            background: 'linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%)',
+            background: 'var(--title-gradient)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}

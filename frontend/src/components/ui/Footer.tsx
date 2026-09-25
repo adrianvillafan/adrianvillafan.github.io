@@ -1,11 +1,12 @@
 import React from 'react'
 import { useScroll } from '@/context/ScrollContext'
-import { personalInfo } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { FiGithub, FiLinkedin, FiMail, FiArrowUp } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 
 export const Footer: React.FC = React.memo(() => {
   const { scrollTo } = useScroll()
+  const { personalInfo } = usePortfolioData()
   const currentYear = new Date().getFullYear()
 
   return (
@@ -76,7 +77,7 @@ export const Footer: React.FC = React.memo(() => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--pill-bg)',
                 color: 'var(--text-secondary)',
                 border: '1px solid var(--border-subtle)',
                 transition: 'all 0.2s ease',
@@ -97,7 +98,7 @@ export const Footer: React.FC = React.memo(() => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--pill-bg)',
                 color: 'var(--text-secondary)',
                 border: '1px solid var(--border-subtle)',
                 transition: 'all 0.2s ease',
@@ -116,7 +117,7 @@ export const Footer: React.FC = React.memo(() => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--pill-bg)',
                 color: 'var(--text-secondary)',
                 border: '1px solid var(--border-subtle)',
                 transition: 'all 0.2s ease',
@@ -137,7 +138,7 @@ export const Footer: React.FC = React.memo(() => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--pill-bg)',
                 color: 'var(--text-secondary)',
                 border: '1px solid var(--border-subtle)',
                 transition: 'all 0.2s ease',
@@ -182,8 +183,8 @@ export const Footer: React.FC = React.memo(() => {
             color: 'var(--text-muted)',
           }}
         >
-          <p>© {currentYear} Adrian Marcel Villafan Virhuez. Todos los derechos reservados.</p>
-          <p>Hecho con Vite, React, TypeScript & Micro-Frontends architecture.</p>
+          <p>© {currentYear} Adrian Marcel Villafan Virhuez. {personalInfo.footer.rights}</p>
+          <p>{personalInfo.footer.builtWith}</p>
         </div>
       </div>
     </footer>

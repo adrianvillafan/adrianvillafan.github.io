@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'motion/react'
-import { experiences } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { ExperienceItem } from '@/types'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -9,8 +9,8 @@ import { Badge } from '@/components/ui/Badge'
 import { FiBriefcase, FiCalendar, FiMapPin, FiCheckCircle } from 'react-icons/fi'
 
 // Sub-componente memoizado para cada tarjeta de experiencia
-const TimelineCard: React.FC<{ item: ExperienceItem; index: number; isLatest: boolean }> = React.memo(
-  ({ item, index, isLatest }) => {
+const TimelineCard: React.FC<{ item: ExperienceItem; index: number; isLatest: boolean; latestBadge: string }> = React.memo(
+  ({ item, index, isLatest, latestBadge }) => {
     return (
       <motion.div
         initial={{ opacity: 0, y: 35 }}
@@ -84,7 +84,7 @@ const TimelineCard: React.FC<{ item: ExperienceItem; index: number; isLatest: bo
                         borderRadius: '9999px',
                       }}
                     >
-                      Más Reciente
+                      {latestBadge}
                     </span>
                   )}
                 </div>
@@ -205,6 +205,7 @@ TimelineCard.displayName = 'TimelineCard'
 
 const Experience: React.FC = () => {
   const sectionRef = useSectionObserver('experience')
+  const { personalInfo, experiences } = usePortfolioData()
 
   return (
     <section
@@ -215,9 +216,9 @@ const Experience: React.FC = () => {
     >
       <div className="container">
         <SectionTitle
-          badge="Trayectoria Laboral"
-          title="Experiencia Profesional & Proyectos Clave"
-          subtitle="Diseño, arquitectura e implementación de soluciones end-to-end, microservicios resilientes, ingeniería de datos y liderazgo técnico."
+          badge={personalInfo.experience.badge}
+          title={personalInfo.experience.title}
+          subtitle={personalInfo.experience.subtitle}
         />
 
         {/* Timeline Container con Guía de Gradiente */}
@@ -247,6 +248,7 @@ const Experience: React.FC = () => {
               item={exp}
               index={idx}
               isLatest={idx === 0}
+              latestBadge={personalInfo.experience.latestBadge}
             />
           ))}
         </div>

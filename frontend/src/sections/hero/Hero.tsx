@@ -1,28 +1,22 @@
 import React, { useMemo } from 'react'
 import { motion } from 'motion/react'
-import { personalInfo } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useScroll } from '@/context/ScrollContext'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { Button } from '@/components/ui/Button'
 import { AuroraBackground } from '@/components/effects/AuroraBackground'
 import { GridPattern } from '@/components/effects/GridPattern'
 import { RotatingText } from '@/components/effects/RotatingText'
-import { FiArrowDown, FiCode, FiMail, FiTerminal } from 'react-icons/fi'
+import { FiArrowDown, FiCode, FiMail } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
-
-const rotatingWords = [
-  'Full Stack Developer',
-  'Data & Backend Engineer',
-  'Computación Científica — UNMSM',
-  'AI & Automation Enthusiast',
-]
 
 const Hero: React.FC = () => {
   const sectionRef = useSectionObserver('hero')
   const { scrollTo } = useScroll()
+  const { personalInfo } = usePortfolioData()
 
   // Memoizar palabras rotativas
-  const words = useMemo(() => rotatingWords, [])
+  const words = useMemo(() => personalInfo.rotatingWords, [personalInfo.rotatingWords])
 
   return (
     <section
@@ -126,7 +120,7 @@ const Hero: React.FC = () => {
             letterSpacing: '-0.04em',
             lineHeight: 1.08,
             marginBottom: '1.25rem',
-            background: 'linear-gradient(180deg, #ffffff 15%, #cbd5e1 65%, #64748b 100%)',
+            background: 'var(--title-gradient)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             maxWidth: '900px',
@@ -151,7 +145,7 @@ const Hero: React.FC = () => {
             color: 'var(--text-secondary)',
           }}
         >
-          <span style={{ fontWeight: 400 }}>Especializado en</span>
+          <span style={{ fontWeight: 400 }}>{personalInfo.heroSpecializedIn}</span>
           {/* 🔷 EFECTO 3: Rotating Text Morphing */}
           <RotatingText words={words} interval={3200} />
         </motion.div>
@@ -192,7 +186,7 @@ const Hero: React.FC = () => {
             icon={<FiCode size={18} />}
             onClick={() => scrollTo('#projects')}
           >
-            Explorar Proyectos
+            {personalInfo.heroActions.projects}
           </Button>
 
           <Button
@@ -201,7 +195,7 @@ const Hero: React.FC = () => {
             icon={<FiMail size={18} />}
             onClick={() => scrollTo('#contact')}
           >
-            Contactar
+            {personalInfo.heroActions.contact}
           </Button>
 
           <Button
@@ -210,7 +204,7 @@ const Hero: React.FC = () => {
             icon={<FaWhatsapp size={18} color="#25D366" />}
             onClick={() => window.open(personalInfo.whatsappUrl, '_blank')}
           >
-            WhatsApp
+            {personalInfo.heroActions.whatsapp}
           </Button>
         </motion.div>
 
@@ -232,7 +226,7 @@ const Hero: React.FC = () => {
           }}
           onClick={() => scrollTo('#about')}
         >
-          <span>Desplaza para explorar</span>
+          <span>{personalInfo.scrollIndicator}</span>
           <motion.div
             animate={{ y: [0, 7, 0] }}
             transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}

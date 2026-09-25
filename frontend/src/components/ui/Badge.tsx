@@ -26,8 +26,8 @@ export const Badge: React.FC<BadgeProps> = React.memo(
 
     const variantStyles: Record<string, React.CSSProperties> = {
       default: {
-        background: 'rgba(255, 255, 255, 0.05)',
-        color: 'var(--text-secondary)',
+        background: 'var(--badge-bg)',
+        color: 'var(--badge-text)',
         border: '1px solid var(--border-subtle)',
       },
       accent: {

@@ -1,9 +1,10 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ProjectItem } from '@/types'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
-import { FiX, FiCheckCircle, FiExternalLink, FiGithub, FiLayers } from 'react-icons/fi'
+import { FiX, FiCheckCircle, FiExternalLink, FiGithub } from 'react-icons/fi'
 
 interface ProjectModalProps {
   project: ProjectItem | null
@@ -11,6 +12,7 @@ interface ProjectModalProps {
 }
 
 export const ProjectModal: React.FC<ProjectModalProps> = React.memo(({ project, onClose }) => {
+  const { personalInfo } = usePortfolioData()
   if (!project) return null
 
   return (
@@ -114,7 +116,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = React.memo(({ project, 
                 marginBottom: '0.4rem',
               }}
             >
-              Descripción General
+              {personalInfo.projects.modal.descriptionTitle}
             </h4>
             <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
               {project.description}
@@ -143,7 +145,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = React.memo(({ project, 
               }}
             >
               <FiCheckCircle size={16} />
-              <span>Impacto y Resultados Clave</span>
+              <span>{personalInfo.projects.modal.impactTitle}</span>
             </div>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', lineHeight: 1.5 }}>
               {project.impact}
@@ -161,7 +163,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = React.memo(({ project, 
                 marginBottom: '0.6rem',
               }}
             >
-              Stack Tecnológico Aplicado
+              {personalInfo.projects.modal.techTitle}
             </h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
               {project.tags.map((tag, i) => (
@@ -190,7 +192,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = React.memo(({ project, 
                 icon={<FiExternalLink size={16} />}
                 onClick={() => window.open(project.demoUrl, '_blank')}
               >
-                Ver Demo
+                {personalInfo.projects.liveDemo}
               </Button>
             )}
             {project.githubUrl && (
@@ -200,11 +202,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = React.memo(({ project, 
                 icon={<FiGithub size={16} />}
                 onClick={() => window.open(project.githubUrl, '_blank')}
               >
-                Ver Código
+                {personalInfo.projects.code}
               </Button>
             )}
             <Button size="md" variant="outline" onClick={onClose}>
-              Cerrar
+              {personalInfo.projects.modal.close}
             </Button>
           </div>
         </motion.div>

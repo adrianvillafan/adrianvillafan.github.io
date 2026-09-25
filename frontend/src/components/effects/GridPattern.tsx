@@ -7,7 +7,7 @@ interface GridPatternProps {
 }
 
 export const GridPattern: React.FC<GridPatternProps> = React.memo(
-  ({ size = 48, strokeColor = 'rgba(255, 255, 255, 0.05)', opacity = 0.7 }) => {
+  ({ size = 48, strokeColor = 'var(--grid-stroke)', opacity = 0.7 }) => {
     return (
       <div
         style={{

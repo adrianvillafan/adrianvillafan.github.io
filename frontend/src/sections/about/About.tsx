@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { motion } from 'motion/react'
-import { personalInfo, certifications } from '@/data/portfolioData'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Card } from '@/components/ui/Card'
@@ -11,9 +11,12 @@ import { FiAward, FiCheckCircle, FiCpu, FiTerminal, FiBookOpen } from 'react-ico
 
 const About: React.FC = () => {
   const sectionRef = useSectionObserver('about')
+  const { personalInfo, certifications } = usePortfolioData()
 
   // Datos memoizados
-  const certsList = useMemo(() => certifications, [])
+  const certsList = useMemo(() => certifications, [certifications])
+  const statsList = useMemo(() => personalInfo.about.stats, [personalInfo.about.stats])
+  const highlightsList = useMemo(() => personalInfo.about.highlights, [personalInfo.about.highlights])
 
   return (
     <section
@@ -23,9 +26,9 @@ const About: React.FC = () => {
     >
       <div className="container">
         <SectionTitle
-          badge="Perfil Profesional"
-          title="Computación Científica & Desarrollo de Alto Rendimiento"
-          subtitle="Formación matemática y algorítmica aplicada a la arquitectura de microservicios, ingeniería de datos y desarrollo web moderno."
+          badge={personalInfo.about.badge}
+          title={personalInfo.about.title}
+          subtitle={personalInfo.about.subtitle}
         />
 
         <div
@@ -49,7 +52,7 @@ const About: React.FC = () => {
             }}
           >
             {/* Tarjeta de Resumen con Gradiente Suave */}
-            <Card style={{ background: 'rgba(255, 255, 255, 0.02)' }}>
+            <Card style={{ background: 'var(--pill-bg)' }}>
               <div
                 style={{
                   display: 'flex',
@@ -68,7 +71,7 @@ const About: React.FC = () => {
                     letterSpacing: '0.08em',
                   }}
                 >
-                  Perfil Académico & Enfoque
+                  {personalInfo.about.academicBadge}
                 </span>
               </div>
               <p
@@ -105,12 +108,7 @@ const About: React.FC = () => {
                 marginTop: '0.5rem',
               }}
             >
-              {[
-                'Desarrollo end-to-end con React, Next.js, Node.js y PHP/Laravel',
-                'Pipelines ETL automatizados, Web Scraping con Playwright y Visión con OpenCV',
-                'Modelado y optimización de SQL (MySQL/MariaDB) y almacenamiento MinIO',
-                'Microservicios con Docker y despliegues en servidores Linux',
-              ].map((item, idx) => (
+              {highlightsList.map((item, idx) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, x: -15 }}
@@ -125,7 +123,7 @@ const About: React.FC = () => {
                     color: 'var(--text-secondary)',
                     padding: '0.5rem 0.75rem',
                     borderRadius: '8px',
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--pill-bg)',
                     border: '1px solid var(--border-subtle)',
                   }}
                 >
@@ -156,86 +154,46 @@ const About: React.FC = () => {
                 gap: '1rem',
               }}
             >
-              {/* Stat 1: Años de Experiencia */}
-              <TiltCard maxTilt={10}>
-                <div style={{ padding: '1.25rem 0.8rem', textAlign: 'center' }}>
-                  <div
-                    style={{
-                      fontSize: 'clamp(2rem, 3vw, 2.5rem)',
-                      fontWeight: 800,
-                      color: 'var(--accent-light)',
-                      lineHeight: 1.1,
-                      marginBottom: '0.4rem',
-                    }}
-                  >
-                    <AnimatedCounter value={3} prefix="+" duration={1.2} />
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.78rem',
-                      color: 'var(--text-muted)',
-                      fontWeight: 500,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    Años de Experiencia
-                  </div>
-                </div>
-              </TiltCard>
-
-              {/* Stat 2: Proyectos / Plataformas */}
-              <TiltCard maxTilt={10} glowColor="rgba(56, 189, 248, 0.18)">
-                <div style={{ padding: '1.25rem 0.8rem', textAlign: 'center' }}>
-                  <div
-                    style={{
-                      fontSize: 'clamp(2rem, 3vw, 2.5rem)',
-                      fontWeight: 800,
-                      color: '#38bdf8',
-                      lineHeight: 1.1,
-                      marginBottom: '0.4rem',
-                    }}
-                  >
-                    <AnimatedCounter value={6} prefix="+" duration={1.5} />
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.78rem',
-                      color: 'var(--text-muted)',
-                      fontWeight: 500,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    Plataformas en Producción
-                  </div>
-                </div>
-              </TiltCard>
-
-              {/* Stat 3: Enfoque de Rendimiento */}
-              <TiltCard maxTilt={10} glowColor="rgba(52, 211, 153, 0.18)">
-                <div style={{ padding: '1.25rem 0.8rem', textAlign: 'center' }}>
-                  <div
-                    style={{
-                      fontSize: 'clamp(2rem, 3vw, 2.5rem)',
-                      fontWeight: 800,
-                      color: '#34d399',
-                      lineHeight: 1.1,
-                      marginBottom: '0.4rem',
-                    }}
-                  >
-                    <AnimatedCounter value={100} suffix="%" duration={1.8} />
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.78rem',
-                      color: 'var(--text-muted)',
-                      fontWeight: 500,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    Rigor & Optimización
-                  </div>
-                </div>
-              </TiltCard>
+              {statsList.map((stat, idx) => {
+                const colors = ['var(--accent-light)', '#38bdf8', '#34d399']
+                const glowColors = [
+                  'rgba(99, 102, 241, 0.15)',
+                  'rgba(56, 189, 248, 0.18)',
+                  'rgba(52, 211, 153, 0.18)',
+                ]
+                return (
+                  <TiltCard key={idx} maxTilt={10} glowColor={glowColors[idx % 3]}>
+                    <div style={{ padding: '1.25rem 0.8rem', textAlign: 'center' }}>
+                      <div
+                        style={{
+                          fontSize: 'clamp(2rem, 3vw, 2.5rem)',
+                          fontWeight: 800,
+                          color: colors[idx % 3],
+                          lineHeight: 1.1,
+                          marginBottom: '0.4rem',
+                        }}
+                      >
+                        <AnimatedCounter
+                          value={stat.value}
+                          prefix={stat.prefix}
+                          suffix={stat.suffix}
+                          duration={1.2 + idx * 0.3}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.78rem',
+                          color: 'var(--text-muted)',
+                          fontWeight: 500,
+                          lineHeight: 1.3,
+                        }}
+                      >
+                        {stat.label}
+                      </div>
+                    </div>
+                  </TiltCard>
+                )
+              })}
             </div>
 
             {/* Tarjeta de Formación Universitaria UNMSM */}
@@ -251,20 +209,20 @@ const About: React.FC = () => {
                 >
                   <FiBookOpen size={20} color="var(--accent-light)" />
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
-                    Formación Universitaria
+                    {personalInfo.about.educationTitle}
                   </h3>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div>
                     <div style={{ fontWeight: 600, fontSize: '0.98rem', color: 'var(--text-primary)' }}>
-                      Universidad Nacional Mayor de San Marcos (UNMSM)
+                      {personalInfo.about.university}
                     </div>
                     <div style={{ fontSize: '0.88rem', color: 'var(--accent-light)', marginTop: '0.2rem' }}>
-                      Bachiller en Computación Científica
+                      {personalInfo.about.degreeTitle}
                     </div>
                   </div>
                   <Badge variant="accent" size="sm">
-                    2020 – 2025
+                    {personalInfo.about.period}
                   </Badge>
                 </div>
               </div>
@@ -283,7 +241,7 @@ const About: React.FC = () => {
                 >
                   <FiAward size={20} color="var(--accent-light)" />
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
-                    Certificaciones & Especializaciones
+                    {personalInfo.about.certsTitle}
                   </h3>
                 </div>
 

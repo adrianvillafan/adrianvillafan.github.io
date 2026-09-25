@@ -1,28 +1,36 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useScroll } from '@/context/ScrollContext'
 import { useActiveSection, SectionId } from '@/context/SectionContext'
 import { useTheme } from '@/context/ThemeContext'
+import { useLanguage } from '@/context/LanguageContext'
+import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { Button } from './Button'
-import { FiSun, FiMoon, FiMenu, FiX } from 'react-icons/fi'
+import { FiSun, FiMoon, FiMenu, FiX, FiGlobe } from 'react-icons/fi'
 
 interface NavLink {
   id: SectionId
   label: string
 }
 
-const navLinks: NavLink[] = [
-  { id: 'about', label: 'Sobre mí' },
-  { id: 'experience', label: 'Experiencia' },
-  { id: 'projects', label: 'Proyectos' },
-  { id: 'skills', label: 'Habilidades' },
-  { id: 'contact', label: 'Contacto' },
-]
-
 export const Navbar: React.FC = React.memo(() => {
   const { isScrolled, scrollTo } = useScroll()
   const { activeSection } = useActiveSection()
   const { theme, toggleTheme } = useTheme()
+  const { isEnglish, toggleLanguage } = useLanguage()
+  const data = usePortfolioData()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Links dinámicos según idioma
+  const navLinks: NavLink[] = useMemo(
+    () => [
+      { id: 'about', label: data.nav.about },
+      { id: 'experience', label: data.nav.experience },
+      { id: 'projects', label: data.nav.projects },
+      { id: 'skills', label: data.nav.skills },
+      { id: 'contact', label: data.nav.contact },
+    ],
+    [data.nav]
+  )
 
   const handleNavClick = useCallback(
     (id: SectionId) => {
@@ -67,7 +75,7 @@ export const Navbar: React.FC = React.memo(() => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.6rem',
+            gap: '0.65rem',
             fontWeight: 700,
             fontSize: '1.1rem',
             letterSpacing: '-0.02em',
@@ -136,14 +144,37 @@ export const Navbar: React.FC = React.memo(() => {
           })}
         </nav>
 
-        {/* Right Actions: Theme Toggle + Contact CTA */}
+        {/* Right Actions: Language Toggle + Theme Toggle + Contact CTA */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
+            gap: '0.65rem',
           }}
         >
+          {/* 🌐 Selector de Idioma ES / EN */}
+          <button
+            onClick={toggleLanguage}
+            title={isEnglish ? 'Switch to Spanish' : 'Cambiar a Inglés'}
+            style={{
+              padding: '0.38rem 0.75rem',
+              borderRadius: '9999px',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              color: 'var(--text-primary)',
+              border: '1px solid var(--border-subtle)',
+              background: 'var(--pill-bg)',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <FiGlobe size={14} color="var(--accent-light)" />
+            <span>{isEnglish ? 'EN' : 'ES'}</span>
+          </button>
+
+          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             aria-label="Cambiar tema"
@@ -156,7 +187,7 @@ export const Navbar: React.FC = React.memo(() => {
               justifyContent: 'center',
               color: 'var(--text-secondary)',
               border: '1px solid var(--border-subtle)',
-              background: 'rgba(255, 255, 255, 0.04)',
+              background: 'var(--pill-bg)',
               transition: 'all 0.2s ease',
             }}
           >
@@ -169,7 +200,7 @@ export const Navbar: React.FC = React.memo(() => {
               variant="primary"
               onClick={() => handleNavClick('contact')}
             >
-              Hablemos
+              {data.nav.talk}
             </Button>
           </div>
 
@@ -187,7 +218,7 @@ export const Navbar: React.FC = React.memo(() => {
               justifyContent: 'center',
               color: 'var(--text-primary)',
               border: '1px solid var(--border-subtle)',
-              background: 'rgba(255, 255, 255, 0.04)',
+              background: 'var(--pill-bg)',
             }}
           >
             {mobileMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
@@ -233,7 +264,7 @@ export const Navbar: React.FC = React.memo(() => {
             fullWidth
             onClick={() => handleNavClick('contact')}
           >
-            Hablemos
+            {data.nav.talk}
           </Button>
         </div>
       )}

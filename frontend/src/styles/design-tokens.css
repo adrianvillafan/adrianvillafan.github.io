@@ -4,12 +4,16 @@
   --bg-secondary: #101014;
   --bg-elevated: #16161c;
   --bg-glass: rgba(16, 16, 20, 0.75);
-  --bg-card: rgba(22, 22, 28, 0.7);
-  --bg-card-hover: rgba(30, 30, 38, 0.9);
+  --bg-card: rgba(22, 22, 28, 0.75);
+  --bg-card-hover: rgba(30, 30, 38, 0.95);
+
+  /* Title Gradients */
+  --title-gradient: linear-gradient(180deg, #ffffff 15%, #cbd5e1 65%, #94a3b8 100%);
+  --subtitle-color: #a1a1aa;
 
   /* Borders & Dividers */
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-active: rgba(255, 255, 255, 0.16);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(255, 255, 255, 0.18);
   --border-focus: rgba(99, 102, 241, 0.5);
 
   /* Typography Colors */
@@ -26,6 +30,16 @@
   --accent-cyan: #38bdf8;
   --accent-emerald: #10b981;
 
+  /* Element Backgrounds */
+  --badge-bg: rgba(255, 255, 255, 0.05);
+  --badge-text: #a1a1aa;
+  --pill-bg: rgba(255, 255, 255, 0.03);
+  --btn-secondary-bg: rgba(255, 255, 255, 0.06);
+  --btn-secondary-border: var(--border-subtle);
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --aurora-opacity: 1;
+  --grid-stroke: rgba(255, 255, 255, 0.05);
+
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -41,21 +55,49 @@
   --shadow-glow: 0 0 35px var(--accent-glow);
 }
 
-/* Light mode support variables */
+/* ☀️ Light mode support variables - High Contrast & Apple Light Aesthetic */
 [data-theme="light"] {
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
   --bg-elevated: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-card: rgba(255, 255, 255, 0.95);
   --bg-card-hover: #ffffff;
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-active: rgba(0, 0, 0, 0.16);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
+
+  /* High-contrast Title Gradient for light mode */
+  --title-gradient: linear-gradient(180deg, #09090b 20%, #1e293b 70%, #334155 100%);
+  --subtitle-color: #334155;
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(0, 0, 0, 0.09);
+  --border-active: rgba(0, 0, 0, 0.2);
+  --border-focus: rgba(79, 70, 229, 0.6);
+
+  /* Typography Colors - Super sharp & readable */
+  --text-primary: #09090b;
+  --text-secondary: #334155;
   --text-muted: #64748b;
   --text-accent: #4f46e5;
+
+  /* Accent Colors */
   --accent: #4f46e5;
-  --accent-glow: rgba(79, 70, 229, 0.12);
-  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --accent-light: #4338ca;
+  --accent-glow: rgba(79, 70, 229, 0.14);
+  --accent-glow-strong: rgba(79, 70, 229, 0.28);
+  --accent-cyan: #0284c7;
+  --accent-emerald: #059669;
+
+  /* Element Backgrounds */
+  --badge-bg: rgba(0, 0, 0, 0.05);
+  --badge-text: #334155;
+  --pill-bg: rgba(0, 0, 0, 0.035);
+  --btn-secondary-bg: rgba(0, 0, 0, 0.05);
+  --btn-secondary-border: rgba(0, 0, 0, 0.12);
+  --input-bg: rgba(0, 0, 0, 0.03);
+  --aurora-opacity: 0.35;
+  --grid-stroke: rgba(0, 0, 0, 0.06);
+
+  /* Shadows for light mode */
+  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
 }
