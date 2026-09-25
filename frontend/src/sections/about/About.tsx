@@ -1,17 +1,22 @@
 import React, { useMemo } from 'react'
 import { motion } from 'motion/react'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
+import { useLanguage } from '@/context/LanguageContext'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { AnimatedCounter } from '@/components/effects/AnimatedCounter'
 import { TiltCard } from '@/components/effects/TiltCard'
-import { FiAward, FiCheckCircle, FiCpu, FiTerminal, FiBookOpen } from 'react-icons/fi'
+import { TextScramble } from '@/components/effects/TextScramble'
+import { EducationCertShowcase } from '@/components/effects/EducationCertShowcase'
+import { CodeRunnerSimulation } from '@/components/effects/CodeRunnerSimulation'
+import { FiAward, FiCheckCircle, FiCpu, FiTerminal, FiBookOpen, FiPlay } from 'react-icons/fi'
 
 const About: React.FC = () => {
   const sectionRef = useSectionObserver('about')
   const { personalInfo, certifications } = usePortfolioData()
+  const { isEnglish } = useLanguage()
 
   // Datos memoizados
   const certsList = useMemo(() => certifications, [certifications])
@@ -196,96 +201,61 @@ const About: React.FC = () => {
               })}
             </div>
 
-            {/* Tarjeta de Formación Universitaria UNMSM */}
-            <TiltCard maxTilt={6}>
-              <div style={{ padding: '1.5rem' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.65rem',
-                    marginBottom: '0.85rem',
-                  }}
-                >
-                  <FiBookOpen size={20} color="var(--accent-light)" />
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
-                    {personalInfo.about.educationTitle}
-                  </h3>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: '0.98rem', color: 'var(--text-primary)' }}>
-                      {personalInfo.about.university}
-                    </div>
-                    <div style={{ fontSize: '0.88rem', color: 'var(--accent-light)', marginTop: '0.2rem' }}>
-                      {personalInfo.about.degreeTitle}
-                    </div>
-                  </div>
-                  <Badge variant="accent" size="sm">
-                    {personalInfo.about.period}
-                  </Badge>
-                </div>
-              </div>
-            </TiltCard>
-
-            {/* Certificaciones IBM & Especializaciones */}
-            <TiltCard maxTilt={6}>
-              <div style={{ padding: '1.5rem' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.65rem',
-                    marginBottom: '1.25rem',
-                  }}
-                >
-                  <FiAward size={20} color="var(--accent-light)" />
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
-                    {personalInfo.about.certsTitle}
-                  </h3>
-                </div>
-
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                  }}
-                >
-                  {certsList.map((cert, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        fontSize: '0.88rem',
-                        borderBottom:
-                          idx !== certsList.length - 1
-                            ? '1px solid var(--border-subtle)'
-                            : 'none',
-                        paddingBottom: idx !== certsList.length - 1 ? '0.75rem' : '0',
-                      }}
-                    >
-                      <div>
-                        <div style={{ fontWeight: 500, color: 'var(--text-primary)' }}>
-                          {cert.title}
-                        </div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                          {cert.issuer}
-                        </div>
-                      </div>
-                      <Badge variant="outline" size="sm">
-                        {cert.year}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TiltCard>
+            {/* 🏛️ Formación Universitaria UNMSM & Certificaciones Interactivas */}
+            <EducationCertShowcase isEnglish={isEnglish} />
           </motion.div>
         </div>
+
+        {/* ⚡ Simulador Interactivo de Algoritmo & Pipeline ETL */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ marginTop: '3.5rem' }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.25rem',
+              flexWrap: 'wrap',
+              gap: '0.75rem',
+            }}
+          >
+            <div>
+              <span
+                style={{
+                  fontSize: '0.76rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  color: 'var(--accent-light)',
+                }}
+              >
+                {isEnglish ? 'Live Engineering Playground' : 'Laboratorio Computacional en Vivo'}
+              </span>
+              <h3
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: 'var(--text-primary)',
+                  marginTop: '0.2rem',
+                }}
+              >
+                {isEnglish
+                  ? 'Interactive Scientific Computing & ETL Simulator'
+                  : 'Simulador Interactivo de ETL & Computación Científica'}
+              </h3>
+            </div>
+            <Badge variant="accent" size="sm">
+              Python 3.12 • OpenCV • Pandas • PostgreSQL
+            </Badge>
+          </div>
+
+          <CodeRunnerSimulation isEnglish={isEnglish} />
+        </motion.div>
       </div>
     </section>
   )

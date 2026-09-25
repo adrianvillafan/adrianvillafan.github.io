@@ -7,6 +7,7 @@ import { InteractiveBackground } from '@/components/effects/InteractiveBackgroun
 import { CustomCursor } from '@/components/effects/CustomCursor'
 import { InteractiveTerminal } from '@/components/effects/InteractiveTerminal'
 import { ScrollProgressBar } from '@/components/effects/ScrollProgressBar'
+import { TechMarquee } from '@/components/effects/TechMarquee'
 
 // 🔷 MICRO-FRONTENDS: Cada sección se carga bajo demanda (lazy-loaded)
 const Hero = lazy(() => import('@/sections/hero/Hero'))
@@ -42,6 +43,9 @@ function App() {
         <Suspense fallback={<SectionFallback height="80vh" />}>
           <Hero />
         </Suspense>
+
+        {/* ⚡ Carrusel continuo de tecnologías & stack con brand icons */}
+        <TechMarquee />
 
         {/* About section */}
         <Suspense fallback={<SectionFallback />}>

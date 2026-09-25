@@ -4,7 +4,33 @@ import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { TiltCard } from '@/components/effects/TiltCard'
-import { FiCpu, FiServer, FiDatabase, FiLayout } from 'react-icons/fi'
+import { soundFX } from '@/utils/soundEffects'
+import { FiCpu, FiServer, FiDatabase, FiLayout, FiCheck } from 'react-icons/fi'
+import {
+  SiReact,
+  SiTypescript,
+  SiJavascript,
+  SiNextdotjs,
+  SiHtml5,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiNestjs,
+  SiPhp,
+  SiLaravel,
+  SiSwagger,
+  SiPython,
+  SiPandas,
+  SiOpencv,
+  SiPuppeteer,
+  SiTensorflow,
+  SiMariadb,
+  SiMysql,
+  SiMongodb,
+  SiMinio,
+  SiDocker,
+  SiLinux,
+  SiGit,
+} from 'react-icons/si'
 
 const categoryIcons = [
   <FiLayout key="0" size={22} color="var(--accent-light)" />,
@@ -20,24 +46,73 @@ const categoryGlows = [
   'rgba(251, 191, 36, 0.16)',
 ]
 
-// Item individual memoizado con micro-hover
-const SkillPill: React.FC<{ name: string; level: string; highlight?: boolean }> = React.memo(
-  ({ name, level, highlight }) => {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0.7rem 0.95rem',
-          borderRadius: '10px',
-          background: highlight ? 'rgba(99, 102, 241, 0.1)' : 'var(--pill-bg)',
-          border: highlight
-            ? '1px solid rgba(99, 102, 241, 0.28)'
-            : '1px solid var(--border-subtle)',
-          transition: 'all 0.2s ease',
-        }}
-      >
+// Mapeo exhaustivo de logos oficiales de marca con sus colores exactos
+const getTechBrand = (name: string, iconKey?: string): { icon: React.ReactNode; color: string } => {
+  const key = (iconKey || name).toLowerCase()
+  if (key.includes('react')) return { icon: <SiReact size={19} />, color: '#61DAFB' }
+  if (key.includes('next')) return { icon: <SiNextdotjs size={19} />, color: 'var(--text-primary)' }
+  if (key.includes('typescript')) return { icon: <SiTypescript size={19} />, color: '#3178C6' }
+  if (key.includes('javascript')) return { icon: <SiJavascript size={19} />, color: '#F7DF1E' }
+  if (key.includes('css') || key.includes('html')) return { icon: <SiHtml5 size={19} />, color: '#E34F26' }
+  if (key.includes('tailwind') || key.includes('ui')) return { icon: <SiTailwindcss size={19} />, color: '#06B6D4' }
+  if (key.includes('node')) return { icon: <SiNodedotjs size={19} />, color: '#5FA04E' }
+  if (key.includes('nest')) return { icon: <SiNestjs size={19} />, color: '#E0234E' }
+  if (key.includes('laravel')) return { icon: <SiLaravel size={19} />, color: '#FF2D20' }
+  if (key.includes('php')) return { icon: <SiPhp size={19} />, color: '#777BB4' }
+  if (key.includes('api') || key.includes('swagger')) return { icon: <SiSwagger size={19} />, color: '#85EA2D' }
+  if (key.includes('python')) return { icon: <SiPython size={19} />, color: '#3776AB' }
+  if (key.includes('pandas')) return { icon: <SiPandas size={19} />, color: '#38bdf8' }
+  if (key.includes('opencv') || key.includes('ocr')) return { icon: <SiOpencv size={19} />, color: '#5C3EE8' }
+  if (key.includes('scraping') || key.includes('playwright')) return { icon: <SiPuppeteer size={19} />, color: '#40B5A4' }
+  if (key.includes('ai') || key.includes('learning')) return { icon: <SiTensorflow size={19} />, color: '#FF6F00' }
+  if (key.includes('mariadb')) return { icon: <SiMariadb size={19} />, color: '#C0765A' }
+  if (key.includes('mysql')) return { icon: <SiMysql size={19} />, color: '#4479A1' }
+  if (key.includes('mongodb')) return { icon: <SiMongodb size={19} />, color: '#47A248' }
+  if (key.includes('minio')) return { icon: <SiMinio size={19} />, color: '#C72C48' }
+  if (key.includes('docker') || key.includes('microservices')) return { icon: <SiDocker size={19} />, color: '#2496ED' }
+  if (key.includes('linux')) return { icon: <SiLinux size={19} />, color: '#FCC624' }
+  if (key.includes('git')) return { icon: <SiGit size={19} />, color: '#F05032' }
+  return { icon: <FiCpu size={19} />, color: 'var(--accent-light)' }
+}
+
+// Item individual con logo de marca, hover de color y feedback
+const SkillPill: React.FC<{
+  name: string
+  level: string
+  iconKey?: string
+  highlight?: boolean
+}> = React.memo(({ name, level, iconKey, highlight }) => {
+  const brand = getTechBrand(name, iconKey)
+
+  return (
+    <div
+      onMouseEnter={() => soundFX.playClick()}
+      className="skill-pill-item"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0.68rem 0.95rem',
+        borderRadius: '10px',
+        background: highlight ? 'rgba(99, 102, 241, 0.08)' : 'var(--pill-bg)',
+        border: highlight
+          ? '1px solid rgba(99, 102, 241, 0.28)'
+          : '1px solid var(--border-subtle)',
+        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        cursor: 'default',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <span
+          style={{
+            color: brand.color,
+            display: 'flex',
+            alignItems: 'center',
+            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))',
+          }}
+        >
+          {brand.icon}
+        </span>
         <span
           style={{
             fontSize: '0.88rem',
@@ -47,19 +122,22 @@ const SkillPill: React.FC<{ name: string; level: string; highlight?: boolean }> 
         >
           {name}
         </span>
-        <span
-          style={{
-            fontSize: '0.74rem',
-            color: highlight ? 'var(--accent-light)' : 'var(--text-muted)',
-            fontWeight: 500,
-          }}
-        >
-          {level}
-        </span>
       </div>
-    )
-  }
-)
+      <span
+        style={{
+          fontSize: '0.74rem',
+          color: highlight ? 'var(--accent-light)' : 'var(--text-muted)',
+          fontWeight: 600,
+          background: highlight ? 'rgba(99, 102, 241, 0.12)' : 'transparent',
+          padding: highlight ? '0.15rem 0.45rem' : '0',
+          borderRadius: '4px',
+        }}
+      >
+        {level}
+      </span>
+    </div>
+  )
+})
 
 SkillPill.displayName = 'SkillPill'
 
@@ -163,6 +241,7 @@ const Skills: React.FC = () => {
                         key={i}
                         name={skill.name}
                         level={skill.level}
+                        iconKey={(skill as any).iconKey}
                         highlight={skill.highlight}
                       />
                     ))}
@@ -173,6 +252,15 @@ const Skills: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <style>{`
+        .skill-pill-item:hover {
+          transform: translateX(4px);
+          background: var(--bg-elevated) !important;
+          border-color: var(--accent-light) !important;
+          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.18);
+        }
+      `}</style>
     </section>
   )
 }

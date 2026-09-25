@@ -6,7 +6,8 @@ import { useLanguage } from '@/context/LanguageContext'
 import { useToast } from '@/context/ToastContext'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { Button } from './Button'
-import { FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiFileText } from 'react-icons/fi'
+import { soundFX } from '@/utils/soundEffects'
+import { FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiFileText, FiVolume2, FiVolumeX } from 'react-icons/fi'
 
 interface NavLink {
   id: SectionId
@@ -21,6 +22,7 @@ export const Navbar: React.FC = React.memo(() => {
   const { showToast } = useToast()
   const data = usePortfolioData()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [soundActive, setSoundActive] = useState(() => soundFX.isEnabled())
 
   // Links dinámicos según idioma
   const navLinks: NavLink[] = useMemo(
@@ -36,13 +38,27 @@ export const Navbar: React.FC = React.memo(() => {
 
   const handleNavClick = useCallback(
     (id: SectionId) => {
+      soundFX.playClick()
       scrollTo(`#${id}`)
       setMobileMenuOpen(false)
     },
     [scrollTo]
   )
 
+  const toggleSound = useCallback(() => {
+    const nextState = soundFX.toggle()
+    setSoundActive(nextState)
+    showToast(
+      nextState
+        ? (isEnglish ? 'Sound Effects Enabled 🔊' : 'Efectos de Sonido Activados 🔊')
+        : (isEnglish ? 'Sound Effects Muted 🔇' : 'Efectos de Sonido Silenciados 🔇'),
+      'info',
+      2000
+    )
+  }, [isEnglish, showToast])
+
   const toggleMobileMenu = useCallback(() => {
+    soundFX.playClick()
     setMobileMenuOpen((prev) => !prev)
   }, [])
 
@@ -179,9 +195,31 @@ export const Navbar: React.FC = React.memo(() => {
             <span>{isEnglish ? 'EN' : 'ES'}</span>
           </button>
 
+          {/* Sound FX Toggle (Web Audio API) */}
+          <button
+            onClick={toggleSound}
+            aria-label={soundActive ? 'Silenciar efectos de sonido' : 'Activar efectos de sonido'}
+            title={soundActive ? (isEnglish ? 'Mute Sound FX' : 'Silenciar Sonidos') : (isEnglish ? 'Enable Sound FX' : 'Activar Sonidos')}
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: soundActive ? 'var(--accent-light)' : 'var(--text-muted)',
+              border: soundActive ? '1px solid rgba(99, 102, 241, 0.4)' : '1px solid var(--border-subtle)',
+              background: soundActive ? 'rgba(99, 102, 241, 0.12)' : 'var(--pill-bg)',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {soundActive ? <FiVolume2 size={17} /> : <FiVolumeX size={17} />}
+          </button>
+
           {/* Theme Toggle */}
           <button
             onClick={() => {
+              soundFX.playPop()
               toggleTheme()
               showToast(
                 theme === 'dark' ? 'Modo claro activado ☀️' : 'Modo oscuro activado 🌙',
@@ -302,6 +340,29 @@ export const Navbar: React.FC = React.memo(() => {
               {link.label}
             </button>
           ))}
+          <div style={{ display: 'flex', gap: '0.65rem' }}>
+            <button
+              onClick={toggleSound}
+              style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '0.65rem 1rem',
+                borderRadius: '8px',
+                border: soundActive ? '1px solid rgba(99, 102, 241, 0.4)' : '1px solid var(--border-subtle)',
+                background: soundActive ? 'rgba(99, 102, 241, 0.12)' : 'var(--pill-bg)',
+                color: soundActive ? 'var(--accent-light)' : 'var(--text-secondary)',
+                fontWeight: 600,
+                fontSize: '0.88rem',
+              }}
+            >
+              {soundActive ? <FiVolume2 size={16} /> : <FiVolumeX size={16} />}
+              <span>{soundActive ? (isEnglish ? 'Sound: ON' : 'Sonido: ON') : (isEnglish ? 'Sound: OFF' : 'Sonido: OFF')}</span>
+            </button>
+          </div>
+
           <a
             href={data.personalInfo.cvUrl}
             target="_blank"

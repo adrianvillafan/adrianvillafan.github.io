@@ -1,4 +1,5 @@
 import React from 'react'
+import { TextScramble } from '@/components/effects/TextScramble'
 
 export interface SectionTitleProps {
   badge?: string
@@ -32,9 +33,10 @@ export const SectionTitle: React.FC<SectionTitleProps> = React.memo(
               padding: '0.35rem 0.9rem',
               borderRadius: '9999px',
               border: '1px solid rgba(99, 102, 241, 0.2)',
+              cursor: 'default',
             }}
           >
-            {badge}
+            <TextScramble text={badge} scrambleOnHover={true} speed={25} />
           </span>
         )}
         <h2
