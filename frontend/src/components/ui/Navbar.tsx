@@ -7,6 +7,7 @@ import { useToast } from '@/context/ToastContext'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { Button } from './Button'
 import { soundFX } from '@/utils/soundEffects'
+import { useCvModal } from '@/context/CvModalContext'
 import { FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiFileText, FiVolume2, FiVolumeX } from 'react-icons/fi'
 
 interface NavLink {
@@ -20,6 +21,7 @@ export const Navbar: React.FC = React.memo(() => {
   const { theme, toggleTheme } = useTheme()
   const { isEnglish, toggleLanguage } = useLanguage()
   const { showToast } = useToast()
+  const { openCvModal } = useCvModal()
   const data = usePortfolioData()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [soundActive, setSoundActive] = useState(() => soundFX.isEnabled())
@@ -246,16 +248,10 @@ export const Navbar: React.FC = React.memo(() => {
 
           <div className="desktop-cta" style={{ display: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <a
-                href={data.personalInfo.cvUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
                 onClick={() => {
-                  showToast(
-                    isEnglish ? 'Opening Adrian Villafan CV (PDF)... 📄' : 'Abriendo CV de Adrian Villafan (PDF)... 📄',
-                    'info',
-                    2500
-                  )
+                  soundFX.playClick()
+                  openCvModal()
                 }}
                 style={{
                   fontSize: '0.82rem',
@@ -269,12 +265,13 @@ export const Navbar: React.FC = React.memo(() => {
                   alignItems: 'center',
                   gap: '0.35rem',
                   transition: 'all 0.2s ease',
+                  cursor: 'pointer',
                 }}
-                title={isEnglish ? 'View CV (PDF)' : 'Ver CV (PDF)'}
+                title={isEnglish ? 'Preview & Download CV (PDF)' : 'Ver y Descargar CV (PDF)'}
               >
                 <FiFileText size={14} color="var(--accent-light)" />
                 <span>{data.nav.cv}</span>
-              </a>
+              </button>
 
               <Button
                 size="sm"
@@ -363,17 +360,11 @@ export const Navbar: React.FC = React.memo(() => {
             </button>
           </div>
 
-          <a
-            href={data.personalInfo.cvUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             onClick={() => {
+              soundFX.playClick()
               setMobileMenuOpen(false)
-              showToast(
-                isEnglish ? 'Opening Adrian Villafan CV (PDF)... 📄' : 'Abriendo CV de Adrian Villafan (PDF)... 📄',
-                'info',
-                2500
-              )
+              openCvModal()
             }}
             style={{
               display: 'flex',
@@ -388,11 +379,12 @@ export const Navbar: React.FC = React.memo(() => {
               fontWeight: 600,
               fontSize: '0.9rem',
               textAlign: 'center',
+              cursor: 'pointer',
             }}
           >
             <FiFileText size={16} color="var(--accent-light)" />
             <span>{data.personalInfo.heroActions.downloadCv}</span>
-          </a>
+          </button>
 
           <Button
             size="md"

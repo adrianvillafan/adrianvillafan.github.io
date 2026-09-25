@@ -37,8 +37,14 @@ export interface SkillCategory {
 }
 
 export interface CertificationItem {
+  id?: string
   title: string
   issuer: string
   year: string
+  issueDate?: string
+  credentialId?: string
   credentialUrl?: string
+  skills?: string[]
+  category?: string
+  hasExternalLink?: boolean
 }

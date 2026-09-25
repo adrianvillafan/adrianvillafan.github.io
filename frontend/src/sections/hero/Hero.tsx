@@ -3,6 +3,8 @@ import { motion } from 'motion/react'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useScroll } from '@/context/ScrollContext'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
+import { useCvModal } from '@/context/CvModalContext'
+import { soundFX } from '@/utils/soundEffects'
 import { Button } from '@/components/ui/Button'
 import { AuroraBackground } from '@/components/effects/AuroraBackground'
 import { GridPattern } from '@/components/effects/GridPattern'
@@ -18,6 +20,7 @@ const Hero: React.FC = () => {
   const { personalInfo } = usePortfolioData()
   const { showToast } = useToast()
   const { isEnglish } = useLanguage()
+  const { openCvModal } = useCvModal()
 
   // Memoizar palabras rotativas
   const words = useMemo(() => personalInfo.rotatingWords, [personalInfo.rotatingWords])
@@ -198,12 +201,8 @@ const Hero: React.FC = () => {
             variant="outline"
             icon={<FiFileText size={18} color="var(--accent-light)" />}
             onClick={() => {
-              showToast(
-                isEnglish ? 'Opening Adrian Villafan CV (PDF)... 📄' : 'Abriendo CV de Adrian Villafan (PDF)... 📄',
-                'info',
-                2500
-              )
-              window.open(personalInfo.cvUrl, '_blank')
+              soundFX.playClick()
+              openCvModal()
             }}
           >
             {personalInfo.heroActions.downloadCv}

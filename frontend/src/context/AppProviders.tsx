@@ -4,6 +4,7 @@ import { ScrollProvider } from './ScrollContext'
 import { SectionProvider } from './SectionContext'
 import { LanguageProvider } from './LanguageContext'
 import { ToastProvider } from './ToastContext'
+import { CvModalProvider } from './CvModalContext'
 
 export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
@@ -11,10 +12,13 @@ export const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children
       <LanguageProvider>
         <ToastProvider>
           <ScrollProvider>
-            <SectionProvider>{children}</SectionProvider>
+            <SectionProvider>
+              <CvModalProvider>{children}</CvModalProvider>
+            </SectionProvider>
           </ScrollProvider>
         </ToastProvider>
       </LanguageProvider>
     </ThemeProvider>
   )
 }
+

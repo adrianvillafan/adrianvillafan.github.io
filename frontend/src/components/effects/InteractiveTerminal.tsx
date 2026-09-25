@@ -4,6 +4,7 @@ import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useLanguage } from '@/context/LanguageContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useScroll } from '@/context/ScrollContext'
+import { useCvModal } from '@/context/CvModalContext'
 import { FiTerminal, FiX, FiCornerDownLeft, FiMaximize2, FiMinimize2 } from 'react-icons/fi'
 
 interface CommandEntry {
@@ -23,6 +24,7 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
   const { language, toggleLanguage, setLanguage } = useLanguage()
   const { theme, toggleTheme } = useTheme()
   const { scrollTo } = useScroll()
+  const { openCvModal } = useCvModal()
 
   const isDark = theme === 'dark'
   const isEs = language === 'es'
@@ -373,18 +375,26 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
 
         case 'cv':
         case 'resume':
-          window.open(personalInfo.cvUrl, '_blank')
+          openCvModal()
           output = (
             <div style={{ fontSize: '0.85rem', color: 'var(--term-green)', lineHeight: 1.5 }}>
-              <p>📄 {isEs ? 'Abriendo Curriculum Vitae de Adrian Villafan (PDF)...' : 'Opening Adrian Villafan Resume (PDF)...'}</p>
-              <a
-                href={personalInfo.cvUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'var(--term-cyan)', textDecoration: 'underline', marginTop: '0.3rem', display: 'inline-block' }}
+              <p>📄 {isEs ? 'Abriendo vista previa interactiva del Curriculum Vitae (PDF)...' : 'Opening Adrian Villafan Resume preview modal (PDF)...'}</p>
+              <button
+                onClick={openCvModal}
+                style={{
+                  color: 'var(--term-cyan)',
+                  textDecoration: 'underline',
+                  marginTop: '0.3rem',
+                  display: 'inline-block',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontSize: '0.85rem',
+                }}
               >
-                {personalInfo.cvUrl}
-              </a>
+                {isEs ? 'Ver / Descargar CV de Adrian Villafan' : 'View / Download Adrian Villafan CV'}
+              </button>
             </div>
           )
           break
