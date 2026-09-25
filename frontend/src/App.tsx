@@ -6,6 +6,7 @@ import { SectionFallback } from '@/components/ui/SectionFallback'
 import { InteractiveBackground } from '@/components/effects/InteractiveBackground'
 import { CustomCursor } from '@/components/effects/CustomCursor'
 import { InteractiveTerminal } from '@/components/effects/InteractiveTerminal'
+import { ScrollProgressBar } from '@/components/effects/ScrollProgressBar'
 
 // 🔷 MICRO-FRONTENDS: Cada sección se carga bajo demanda (lazy-loaded)
 const Hero = lazy(() => import('@/sections/hero/Hero'))
@@ -18,6 +19,9 @@ const Contact = lazy(() => import('@/sections/contact/Contact'))
 function App() {
   return (
     <AppProviders>
+      {/* 🚀 Barra de progreso de scroll superior animada */}
+      <ScrollProgressBar />
+
       {/* Noise texture overlay */}
       <div className="noise-bg" />
 

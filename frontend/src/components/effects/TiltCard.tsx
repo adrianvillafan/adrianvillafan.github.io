@@ -77,6 +77,27 @@ export const TiltCard: React.FC<TiltCardProps> = React.memo(
             }}
           />
         )}
+
+        {/* Dynamic illuminated border spotlight */}
+        <div
+          style={{
+            position: 'absolute',
+            pointerEvents: 'none',
+            inset: 0,
+            borderRadius: 'inherit',
+            padding: '1.5px',
+            background: isHovered
+              ? `radial-gradient(260px circle at ${mousePos.x}px ${mousePos.y}px, var(--accent-light), transparent 75%)`
+              : 'transparent',
+            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            WebkitMaskComposite: 'xor',
+            maskComposite: 'exclude',
+            transition: 'opacity 0.2s ease',
+            opacity: isHovered ? 0.9 : 0,
+            zIndex: 5,
+          }}
+        />
+
         <div style={{ position: 'relative', zIndex: 1 }}>{children}</div>
       </div>
     )

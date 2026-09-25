@@ -9,7 +9,7 @@ import { GridPattern } from '@/components/effects/GridPattern'
 import { RotatingText } from '@/components/effects/RotatingText'
 import { useToast } from '@/context/ToastContext'
 import { useLanguage } from '@/context/LanguageContext'
-import { FiArrowDown, FiCode, FiMail, FiFileText } from 'react-icons/fi'
+import { FiArrowDown, FiCode, FiFileText } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 
 const Hero: React.FC = () => {
@@ -191,15 +191,6 @@ const Hero: React.FC = () => {
             onClick={() => scrollTo('#projects')}
           >
             {personalInfo.heroActions.projects}
-          </Button>
-
-          <Button
-            size="lg"
-            variant="secondary"
-            icon={<FiMail size={18} />}
-            onClick={() => scrollTo('#contact')}
-          >
-            {personalInfo.heroActions.contact}
           </Button>
 
           <Button

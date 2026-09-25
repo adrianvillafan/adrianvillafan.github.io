@@ -262,7 +262,7 @@ const Projects: React.FC = () => {
           subtitle={personalInfo.projects.subtitle}
         />
 
-        {/* Filter Pills */}
+        {/* Filter Pills with animated sliding active indicator */}
         <div
           style={{
             display: 'flex',
@@ -279,24 +279,34 @@ const Projects: React.FC = () => {
                 key={cat.key}
                 onClick={() => handleFilterChange(cat.key)}
                 style={{
-                  padding: '0.45rem 1.15rem',
+                  position: 'relative',
+                  padding: '0.5rem 1.25rem',
                   borderRadius: '9999px',
                   fontSize: '0.88rem',
                   fontWeight: isSelected ? 600 : 400,
-                  transition: 'all 0.2s ease',
-                  background: isSelected
-                    ? 'var(--accent)'
-                    : 'var(--pill-bg)',
                   color: isSelected ? '#ffffff' : 'var(--text-secondary)',
-                  border: isSelected
-                    ? '1px solid var(--accent-light)'
-                    : '1px solid var(--border-subtle)',
-                  boxShadow: isSelected
-                    ? '0 0 15px rgba(99, 102, 241, 0.3)'
-                    : 'none',
+                  border: isSelected ? '1px solid transparent' : '1px solid var(--border-subtle)',
+                  background: isSelected ? 'transparent' : 'var(--pill-bg)',
+                  transition: 'color 0.2s ease, border-color 0.2s ease',
+                  cursor: 'pointer',
                 }}
               >
-                {cat.label}
+                {isSelected && (
+                  <motion.div
+                    layoutId="activeCategoryPill"
+                    transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '9999px',
+                      background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                      border: '1px solid var(--accent-light)',
+                      boxShadow: '0 0 20px rgba(99, 102, 241, 0.45)',
+                      zIndex: 0,
+                    }}
+                  />
+                )}
+                <span style={{ position: 'relative', zIndex: 1 }}>{cat.label}</span>
               </button>
             )
           })}

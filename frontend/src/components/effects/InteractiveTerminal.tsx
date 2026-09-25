@@ -24,21 +24,22 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
   const { theme, toggleTheme } = useTheme()
   const { scrollTo } = useScroll()
 
+  const isDark = theme === 'dark'
+  const isEs = language === 'es'
+
   const inputRef = useRef<HTMLInputElement | null>(null)
   const outputContainerRef = useRef<HTMLDivElement | null>(null)
-
-  const isEs = language === 'es'
 
   // Mensaje de bienvenida inicial
   const getWelcomeMessage = useCallback(
     () => (
-      <div style={{ color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-        <p style={{ color: '#34d399', fontWeight: 600 }}>
+      <div style={{ color: 'var(--term-fg-secondary)', lineHeight: 1.55 }}>
+        <p style={{ color: 'var(--term-green)', fontWeight: 600 }}>
           {isEs
             ? '¡Bienvenido a la terminal de Adrian Villafan! (UNMSM Scientific Computing OS v2.0)'
             : 'Welcome to Adrian Villafan CLI! (UNMSM Scientific Computing OS v2.0)'}
         </p>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '0.2rem' }}>
+        <p style={{ color: 'var(--term-fg-muted)', fontSize: '0.82rem', marginTop: '0.2rem' }}>
           {isEs
             ? 'Escribe "help" para ver los comandos disponibles o presiona los atajos rápidos.'
             : 'Type "help" to see available commands or click the quick pills below.'}
@@ -104,38 +105,44 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
       switch (mainCmd) {
         case 'help':
           output = (
-            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '0.4rem', fontSize: '0.85rem' }}>
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>whoami</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--term-fg-secondary)' }}>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>whoami</span>
               <span>{isEs ? 'Resumen biográfico y académico' : 'Profile bio & academic background'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>skills</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>skills</span>
               <span>{isEs ? 'Stack tecnológico clasificado por áreas' : 'Tech stack categorized by domain'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>projects</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>projects</span>
               <span>{isEs ? 'Lista de proyectos y plataformas desarrolladas' : 'List of engineering projects'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>experience</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>experience</span>
               <span>{isEs ? 'Trayectoria profesional en IntiCo e Inteligo' : 'Work experience history'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>contact</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>contact</span>
               <span>{isEs ? 'Información y enlaces directos de contacto' : 'Direct contact channels & links'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>theme</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>theme</span>
               <span>{isEs ? 'Alterna entre modo claro y oscuro' : 'Toggle light/dark theme'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>lang [es|en]</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>lang [es|en]</span>
               <span>{isEs ? 'Cambia el idioma del sistema' : 'Change portfolio language'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>goto [sec]</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>goto [sec]</span>
               <span>{isEs ? 'Navega a: hero, about, experience, projects, skills, contact' : 'Scroll to a section'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>cv / resume</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>cv / resume</span>
               <span>{isEs ? 'Abre o descarga el CV en formato PDF' : 'Open or download resume (PDF)'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>clear</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>neofetch</span>
+              <span>{isEs ? 'Muestra ficha técnica gráfica del sistema' : 'Display system specs & profile summary'}</span>
+
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>quote</span>
+              <span>{isEs ? 'Frase célebre sobre computación e ingeniería' : 'Inspirational computing quote'}</span>
+
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>clear</span>
               <span>{isEs ? 'Limpia la pantalla de la consola' : 'Clear terminal output'}</span>
 
-              <span style={{ color: '#38bdf8', fontWeight: 600 }}>exit</span>
+              <span style={{ color: 'var(--term-cyan)', fontWeight: 600 }}>exit</span>
               <span>{isEs ? 'Cierra la ventana del terminal' : 'Close terminal window'}</span>
             </div>
           )
@@ -144,14 +151,14 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
         case 'whoami':
           output = (
             <div style={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-              <p style={{ color: 'var(--accent-light)', fontWeight: 700, fontSize: '1rem' }}>
+              <p style={{ color: 'var(--term-accent)', fontWeight: 700, fontSize: '1rem' }}>
                 {personalInfo.name}
               </p>
-              <p style={{ color: '#34d399' }}>{personalInfo.title}</p>
-              <p style={{ color: 'var(--text-secondary)', marginTop: '0.3rem' }}>
+              <p style={{ color: 'var(--term-green)', fontWeight: 600 }}>{personalInfo.title}</p>
+              <p style={{ color: 'var(--term-fg-secondary)', marginTop: '0.3rem' }}>
                 {personalInfo.degree} — {personalInfo.location}
               </p>
-              <p style={{ marginTop: '0.4rem', color: 'var(--text-muted)' }}>
+              <p style={{ marginTop: '0.4rem', color: 'var(--term-fg-muted)' }}>
                 {personalInfo.about.lead}
               </p>
             </div>
@@ -163,8 +170,8 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
               {skillCategories.map((cat, idx) => (
                 <div key={idx}>
-                  <span style={{ color: '#fbbf24', fontWeight: 600 }}>[{cat.name}]: </span>
-                  <span style={{ color: 'var(--text-secondary)' }}>
+                  <span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>[{cat.name}]: </span>
+                  <span style={{ color: 'var(--term-fg-secondary)' }}>
                     {cat.skills.map((s) => s.name).join(', ')}
                   </span>
                 </div>
@@ -177,16 +184,16 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
           output = (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
               {projectsList.map((p, idx) => (
-                <div key={idx} style={{ padding: '0.4rem 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <div key={idx} style={{ padding: '0.4rem 0', borderBottom: '1px solid var(--term-border)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ color: '#34d399', fontWeight: 700 }}>#{p.id}</span>
-                    <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{p.title}</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--accent-light)' }}>({p.category})</span>
+                    <span style={{ color: 'var(--term-green)', fontWeight: 700 }}>#{p.id}</span>
+                    <span style={{ color: 'var(--term-fg-primary)', fontWeight: 600 }}>{p.title}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--term-accent)' }}>({p.category})</span>
                   </div>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.2rem' }}>
+                  <p style={{ color: 'var(--term-fg-muted)', fontSize: '0.8rem', marginTop: '0.2rem' }}>
                     {p.subtitle}
                   </p>
-                  <p style={{ color: '#38bdf8', fontSize: '0.78rem', marginTop: '0.15rem' }}>
+                  <p style={{ color: 'var(--term-cyan)', fontSize: '0.78rem', marginTop: '0.15rem' }}>
                     Stack: {p.tags.join(', ')}
                   </p>
                 </div>
@@ -199,14 +206,14 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
           output = (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
               {experiences.map((exp) => (
-                <div key={exp.id} style={{ borderLeft: '2px solid var(--accent)', paddingLeft: '0.75rem' }}>
-                  <p style={{ color: 'var(--text-primary)', fontWeight: 700 }}>
-                    {exp.role} <span style={{ color: 'var(--accent-light)' }}>@ {exp.company}</span>
+                <div key={exp.id} style={{ borderLeft: '2px solid var(--term-accent)', paddingLeft: '0.75rem' }}>
+                  <p style={{ color: 'var(--term-fg-primary)', fontWeight: 700 }}>
+                    {exp.role} <span style={{ color: 'var(--term-accent)' }}>@ {exp.company}</span>
                   </p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                  <p style={{ color: 'var(--term-fg-muted)', fontSize: '0.78rem' }}>
                     {exp.period} • {exp.location}
                   </p>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', marginTop: '0.25rem' }}>
+                  <p style={{ color: 'var(--term-fg-secondary)', fontSize: '0.82rem', marginTop: '0.25rem' }}>
                     {exp.achievements[0]}
                   </p>
                 </div>
@@ -219,26 +226,26 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
           output = (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.86rem' }}>
               <p>
-                <span style={{ color: 'var(--text-muted)' }}>Email: </span>
-                <a href={`mailto:${personalInfo.email}`} style={{ color: 'var(--accent-light)', textDecoration: 'underline' }}>
+                <span style={{ color: 'var(--term-fg-muted)' }}>Email: </span>
+                <a href={`mailto:${personalInfo.email}`} style={{ color: 'var(--term-accent)', textDecoration: 'underline' }}>
                   {personalInfo.email}
                 </a>
               </p>
               <p>
-                <span style={{ color: 'var(--text-muted)' }}>WhatsApp: </span>
-                <a href={personalInfo.whatsappUrl} target="_blank" rel="noreferrer" style={{ color: '#34d399', textDecoration: 'underline' }}>
+                <span style={{ color: 'var(--term-fg-muted)' }}>WhatsApp: </span>
+                <a href={personalInfo.whatsappUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--term-green)', textDecoration: 'underline' }}>
                   {personalInfo.phone}
                 </a>
               </p>
               <p>
-                <span style={{ color: 'var(--text-muted)' }}>LinkedIn: </span>
-                <a href={personalInfo.linkedinUrl} target="_blank" rel="noreferrer" style={{ color: '#38bdf8', textDecoration: 'underline' }}>
+                <span style={{ color: 'var(--term-fg-muted)' }}>LinkedIn: </span>
+                <a href={personalInfo.linkedinUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--term-cyan)', textDecoration: 'underline' }}>
                   {personalInfo.linkedinUrl}
                 </a>
               </p>
               <p>
-                <span style={{ color: 'var(--text-muted)' }}>GitHub: </span>
-                <a href={personalInfo.githubUrl} target="_blank" rel="noreferrer" style={{ color: '#a78bfa', textDecoration: 'underline' }}>
+                <span style={{ color: 'var(--term-fg-muted)' }}>GitHub: </span>
+                <a href={personalInfo.githubUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--term-accent)', textDecoration: 'underline' }}>
                   {personalInfo.githubUrl}
                 </a>
               </p>
@@ -298,6 +305,62 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
           )
           break
 
+        case 'neofetch':
+        case 'specs':
+          output = (
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(70px, 110px) 1fr', gap: '1rem', alignItems: 'center', fontSize: '0.82rem', fontFamily: 'monospace' }}>
+              <div style={{ color: 'var(--term-accent)', fontWeight: 800, lineHeight: 1.25, whiteSpace: 'pre' }}>
+{`  /\\_/\\
+ ( o.o )
+  > ^ <
+ [UNMSM]`}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', color: 'var(--term-fg-secondary)' }}>
+                <p><span style={{ color: 'var(--term-green)', fontWeight: 700 }}>adrian</span>@<span style={{ color: 'var(--term-cyan)', fontWeight: 700 }}>unmsm-lab</span></p>
+                <p style={{ color: 'var(--term-border)' }}>-----------------------</p>
+                <p><span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>OS:</span> Scientific Computing v2.0</p>
+                <p><span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>Host:</span> Adrian Marcel Villafan</p>
+                <p><span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>Role:</span> Full Stack & Data Engineer</p>
+                <p><span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>Stack:</span> React 19, TypeScript, Node, Python</p>
+                <p><span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>Origin:</span> UNMSM — Lima, Peru</p>
+                <p><span style={{ color: 'var(--term-amber)', fontWeight: 600 }}>Status:</span> Available for high-impact roles 🚀</p>
+              </div>
+            </div>
+          )
+          break
+
+        case 'quote':
+          const quotes = isEs
+            ? [
+                '"La ciencia de la computación no se trata de computadoras, así como la astronomía no se trata de telescopios." — Edsger W. Dijkstra',
+                '"Primero resuelve el problema. Luego, escribe el código." — John Johnson',
+                '"Simplicidad es el requisito previo para la confiabilidad." — Edsger W. Dijkstra',
+              ]
+            : [
+                '"Computer science is no more about computers than astronomy is about telescopes." — Edsger W. Dijkstra',
+                '"First, solve the problem. Then, write the code." — John Johnson',
+                '"Simplicity is prerequisite for reliability." — Edsger W. Dijkstra',
+              ]
+          const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]
+          output = (
+            <div style={{ color: 'var(--term-cyan)', fontStyle: 'italic', fontSize: '0.85rem', padding: '0.4rem 0' }}>
+              {randomQuote}
+            </div>
+          )
+          break
+
+        case 'matrix':
+          output = (
+            <div style={{ color: '#22c55e', fontFamily: 'monospace', fontSize: '0.82rem', lineHeight: 1.4 }}>
+              <p>01000001 01000100 01010010 01001001 01000001 01001110</p>
+              <p>01010101 01001110 01001101 01010011 01001101 00100000</p>
+              <p style={{ color: 'var(--term-green)', fontWeight: 700, marginTop: '0.2rem' }}>
+                ⚡ {isEs ? 'Pipeline neuronal & matemático inicializado.' : 'Neural & mathematical pipeline initialized.'}
+              </p>
+            </div>
+          )
+          break
+
         case 'clear':
           setHistory([])
           setInputVal('')
@@ -312,13 +375,13 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
         case 'resume':
           window.open(personalInfo.cvUrl, '_blank')
           output = (
-            <div style={{ fontSize: '0.85rem', color: '#34d399', lineHeight: 1.5 }}>
+            <div style={{ fontSize: '0.85rem', color: 'var(--term-green)', lineHeight: 1.5 }}>
               <p>📄 {isEs ? 'Abriendo Curriculum Vitae de Adrian Villafan (PDF)...' : 'Opening Adrian Villafan Resume (PDF)...'}</p>
               <a
                 href={personalInfo.cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: '#38bdf8', textDecoration: 'underline', marginTop: '0.3rem', display: 'inline-block' }}
+                style={{ color: 'var(--term-cyan)', textDecoration: 'underline', marginTop: '0.3rem', display: 'inline-block' }}
               >
                 {personalInfo.cvUrl}
               </a>
@@ -378,7 +441,7 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
     }
   }
 
-  const quickCommands = ['whoami', 'skills', 'projects', 'cv', 'experience', 'contact', 'clear']
+  const quickCommands = ['whoami', 'skills', 'projects', 'neofetch', 'cv', 'experience', 'contact', 'clear']
 
   return (
     <>
@@ -463,17 +526,29 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                 width: '100%',
                 maxWidth: isMaximized ? '96vw' : '720px',
                 height: isMaximized ? '90vh' : '520px',
-                background: 'rgba(10, 15, 29, 0.94)',
-                border: '1px solid rgba(99, 102, 241, 0.35)',
+                background: isDark ? 'rgba(10, 15, 29, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+                border: isDark ? '1px solid rgba(99, 102, 241, 0.35)' : '1px solid rgba(99, 102, 241, 0.22)',
                 borderRadius: '16px',
-                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(99, 102, 241, 0.25)',
+                boxShadow: isDark
+                  ? '0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(99, 102, 241, 0.25)'
+                  : '0 25px 60px -15px rgba(15, 23, 42, 0.16), 0 0 35px rgba(99, 102, 241, 0.14)',
                 backdropFilter: 'blur(20px)',
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
                 zIndex: 99999,
-                color: '#e2e8f0',
+                color: isDark ? '#f1f5f9' : '#0f172a',
                 fontFamily: 'Consolas, Monaco, "Courier New", monospace',
+                transition: 'background 0.25s ease, border-color 0.25s ease, color 0.25s ease',
+                // CSS Variables for terminal children
+                ['--term-fg-primary' as any]: isDark ? '#f8fafc' : '#0f172a',
+                ['--term-fg-secondary' as any]: isDark ? '#cbd5e1' : '#334155',
+                ['--term-fg-muted' as any]: isDark ? '#94a3b8' : '#64748b',
+                ['--term-accent' as any]: isDark ? '#818cf8' : '#4f46e5',
+                ['--term-green' as any]: isDark ? '#34d399' : '#059669',
+                ['--term-cyan' as any]: isDark ? '#38bdf8' : '#0284c7',
+                ['--term-amber' as any]: isDark ? '#fbbf24' : '#d97706',
+                ['--term-border' as any]: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
               }}
             >
               {/* Terminal Title Bar */}
@@ -483,8 +558,8 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '0.75rem 1rem',
-                  background: 'rgba(255, 255, 255, 0.04)',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
+                  borderBottom: '1px solid var(--term-border)',
                   userSelect: 'none',
                 }}
               >
@@ -529,13 +604,13 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                 </div>
 
                 {/* Title */}
-                <div style={{ fontSize: '0.82rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <FiTerminal size={14} color="#34d399" />
+                <div style={{ fontSize: '0.82rem', color: 'var(--term-fg-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <FiTerminal size={14} color="var(--term-green)" />
                   <span>adrian@unmsm-lab: ~ (zsh)</span>
                 </div>
 
                 {/* Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#94a3b8' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--term-fg-muted)' }}>
                   <button
                     onClick={() => setIsMaximized((prev) => !prev)}
                     style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', display: 'flex' }}
@@ -560,13 +635,13 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                   alignItems: 'center',
                   gap: '0.4rem',
                   padding: '0.5rem 1rem',
-                  background: 'rgba(0, 0, 0, 0.25)',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                  background: isDark ? 'rgba(0, 0, 0, 0.25)' : 'rgba(241, 245, 249, 0.85)',
+                  borderBottom: '1px solid var(--term-border)',
                   overflowX: 'auto',
                   flexShrink: 0,
                 }}
               >
-                <span style={{ fontSize: '0.74rem', color: '#64748b', marginRight: '0.2rem' }}>
+                <span style={{ fontSize: '0.74rem', color: 'var(--term-fg-muted)', marginRight: '0.2rem' }}>
                   {isEs ? 'Atajos:' : 'Quick:'}
                 </span>
                 {quickCommands.map((cmd) => (
@@ -578,9 +653,9 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                       borderRadius: '6px',
                       fontSize: '0.75rem',
                       fontFamily: 'monospace',
-                      background: 'rgba(99, 102, 241, 0.12)',
-                      border: '1px solid rgba(99, 102, 241, 0.25)',
-                      color: 'var(--accent-light)',
+                      background: isDark ? 'rgba(99, 102, 241, 0.12)' : 'rgba(99, 102, 241, 0.08)',
+                      border: isDark ? '1px solid rgba(99, 102, 241, 0.25)' : '1px solid rgba(99, 102, 241, 0.2)',
+                      color: 'var(--term-accent)',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease',
                       whiteSpace: 'nowrap',
@@ -607,9 +682,9 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                 {history.map((entry, idx) => (
                   <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                     {entry.command && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#38bdf8' }}>
-                        <span style={{ color: '#34d399' }}>adrian@unmsm:~$</span>
-                        <span style={{ color: '#ffffff', fontWeight: 600 }}>{entry.command}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ color: 'var(--term-green)', fontWeight: 600 }}>adrian@unmsm:~$</span>
+                        <span style={{ color: 'var(--term-fg-primary)', fontWeight: 600 }}>{entry.command}</span>
                       </div>
                     )}
                     <div style={{ paddingLeft: entry.command ? '1.25rem' : '0' }}>{entry.output}</div>
@@ -624,11 +699,11 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                   alignItems: 'center',
                   gap: '0.65rem',
                   padding: '0.85rem 1rem',
-                  background: 'rgba(0, 0, 0, 0.4)',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                  background: isDark ? 'rgba(0, 0, 0, 0.4)' : 'rgba(248, 250, 252, 0.95)',
+                  borderTop: '1px solid var(--term-border)',
                 }}
               >
-                <span style={{ color: '#34d399', fontWeight: 700, fontSize: '0.9rem', flexShrink: 0 }}>
+                <span style={{ color: 'var(--term-green)', fontWeight: 700, fontSize: '0.9rem', flexShrink: 0 }}>
                   adrian@unmsm:~$
                 </span>
                 <input
@@ -643,7 +718,7 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                     background: 'transparent',
                     border: 'none',
                     outline: 'none',
-                    color: '#ffffff',
+                    color: 'var(--term-fg-primary)',
                     fontFamily: 'inherit',
                     fontSize: '0.9rem',
                   }}
@@ -654,7 +729,7 @@ export const InteractiveTerminal: React.FC = React.memo(() => {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#64748b',
+                    color: 'var(--term-fg-muted)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',

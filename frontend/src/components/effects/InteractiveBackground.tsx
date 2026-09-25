@@ -13,6 +13,26 @@ interface Particle {
   alpha: number
 }
 
+interface Shockwave {
+  x: number
+  y: number
+  radius: number
+  maxRadius: number
+  opacity: number
+  speed: number
+}
+
+interface Spark {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  radius: number
+  color: string
+  alpha: number
+  life: number
+}
+
 export const InteractiveBackground: React.FC = React.memo(() => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const { theme } = useTheme()
@@ -42,13 +62,15 @@ export const InteractiveBackground: React.FC = React.memo(() => {
     // Adaptar colores según tema
     const isDark = theme === 'dark'
     const particleColors = isDark
-      ? ['#818cf8', '#38bdf8', '#34d399', '#a78bfa']
-      : ['#6366f1', '#0ea5e9', '#10b981', '#8b5cf6']
+      ? ['#818cf8', '#38bdf8', '#34d399', '#a78bfa', '#f472b6']
+      : ['#6366f1', '#0ea5e9', '#10b981', '#8b5cf6', '#ec4899']
     const lineColor = isDark ? 'rgba(129, 140, 248, ' : 'rgba(99, 102, 241, '
 
     // Ajustar densidad de partículas de manera equilibrada
-    const particleCount = Math.min(Math.floor((width * height) / 24000), 55)
+    const particleCount = Math.min(Math.floor((width * height) / 22000), 60)
     const particles: Particle[] = []
+    const shockwaves: Shockwave[] = []
+    const sparks: Spark[] = []
 
     for (let i = 0; i < particleCount; i++) {
       const x = Math.random() * width
@@ -82,8 +104,38 @@ export const InteractiveBackground: React.FC = React.memo(() => {
       targetMouseY = -9999
     }
 
+    // 💥 Interacción al clic: Onda gravitacional + ráfaga de chispas
+    const handlePointerDown = (e: PointerEvent) => {
+      shockwaves.push({
+        x: e.clientX,
+        y: e.clientY,
+        radius: 4,
+        maxRadius: Math.min(width, height) * 0.28,
+        opacity: isDark ? 0.7 : 0.55,
+        speed: 7.5,
+      })
+
+      // Generar chispas estelares en el punto de impacto
+      const sparkCount = 9
+      for (let i = 0; i < sparkCount; i++) {
+        const angle = Math.random() * Math.PI * 2
+        const speed = Math.random() * 3.5 + 1.5
+        sparks.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          radius: Math.random() * 2 + 1.2,
+          color: particleColors[Math.floor(Math.random() * particleColors.length)],
+          alpha: 1,
+          life: 1,
+        })
+      }
+    }
+
     window.addEventListener('resize', handleResize)
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
+    window.addEventListener('pointerdown', handlePointerDown)
     document.addEventListener('pointerleave', handlePointerLeave)
 
     // Loop de renderizado optimizado
@@ -108,13 +160,72 @@ export const InteractiveBackground: React.FC = React.memo(() => {
         ctx.fill()
       }
 
-      // Actualizar y dibujar partículas
+      // 🔷 Procesar y dibujar ondas de choque gravitacionales (clics)
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const sw = shockwaves[i]
+        sw.radius += sw.speed
+        sw.opacity *= 0.94
+
+        if (sw.radius >= sw.maxRadius || sw.opacity <= 0.02) {
+          shockwaves.splice(i, 1)
+          continue
+        }
+
+        // Impulso radial sobre las partículas en el frente de la onda
+        for (let j = 0; j < particles.length; j++) {
+          const p = particles[j]
+          const dx = p.x - sw.x
+          const dy = p.y - sw.y
+          const dist = Math.hypot(dx, dy)
+          if (Math.abs(dist - sw.radius) < 36 && dist > 0) {
+            const pushFactor = (1 - sw.radius / sw.maxRadius) * 3.2
+            p.vx += (dx / dist) * pushFactor
+            p.vy += (dy / dist) * pushFactor
+          }
+        }
+
+        // Dibujar anillo de pulso
+        ctx.beginPath()
+        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2)
+        ctx.strokeStyle = isDark
+          ? `rgba(129, 140, 248, ${sw.opacity})`
+          : `rgba(99, 102, 241, ${sw.opacity})`
+        ctx.lineWidth = 2
+        ctx.stroke()
+      }
+
+      // 🔷 Procesar chispas de impacto
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const sp = sparks[i]
+        sp.x += sp.vx
+        sp.y += sp.vy
+        sp.vx *= 0.93
+        sp.vy *= 0.93
+        sp.life -= 0.028
+        sp.alpha = Math.max(0, sp.life)
+
+        if (sp.life <= 0) {
+          sparks.splice(i, 1)
+          continue
+        }
+
+        ctx.beginPath()
+        ctx.arc(sp.x, sp.y, sp.radius, 0, Math.PI * 2)
+        ctx.fillStyle = sp.color
+        ctx.globalAlpha = sp.alpha
+        ctx.fill()
+        ctx.globalAlpha = 1
+      }
+
+      // 🔷 Actualizar y dibujar partículas
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
 
-        // Movimiento natural
+        // Movimiento natural con amortiguación
         p.x += p.vx
         p.y += p.vy
+        p.vx = p.vx * 0.98 + (Math.random() - 0.5) * 0.015
+        p.vy = p.vy * 0.98 + (Math.random() - 0.5) * 0.015
 
         // Rebote elástico suave en los bordes
         if (p.x < 0 || p.x > width) p.vx *= -1
@@ -144,7 +255,7 @@ export const InteractiveBackground: React.FC = React.memo(() => {
       }
 
       // Dibujar conexiones de red / constelaciones
-      const maxConnectDistance = 110
+      const maxConnectDistance = 115
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x
@@ -199,6 +310,7 @@ export const InteractiveBackground: React.FC = React.memo(() => {
       cancelAnimationFrame(animationFrameId)
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerdown', handlePointerDown)
       document.removeEventListener('pointerleave', handlePointerLeave)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
