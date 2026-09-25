@@ -2,36 +2,107 @@ import React, { useState, useCallback } from 'react'
 import { motion } from 'motion/react'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { useSectionObserver } from '@/hooks/useSectionObserver'
+import { useToast } from '@/context/ToastContext'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { TiltCard } from '@/components/effects/TiltCard'
 import { Button } from '@/components/ui/Button'
-import { FiMail, FiMapPin, FiSend, FiCheck, FiCopy } from 'react-icons/fi'
+import { FiMail, FiMapPin, FiSend, FiCheck, FiCopy, FiLoader } from 'react-icons/fi'
 import { FaWhatsapp, FaLinkedin, FaGithub } from 'react-icons/fa'
 
 const Contact: React.FC = () => {
   const sectionRef = useSectionObserver('contact')
   const { personalInfo } = usePortfolioData()
+  const { showToast } = useToast()
   const [copied, setCopied] = useState(false)
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
 
   const handleCopyEmail = useCallback(() => {
     navigator.clipboard.writeText(personalInfo.email)
     setCopied(true)
+    const isEs = personalInfo.contact.copied === 'Copiado'
+    showToast(
+      isEs ? '¡Correo copiado al portapapeles! 📋' : 'Email copied to clipboard! 📋',
+      'success',
+      2500
+    )
     setTimeout(() => setCopied(false), 2000)
-  }, [personalInfo.email])
+  }, [personalInfo.email, personalInfo.contact.copied, showToast])
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault()
-      const subject = encodeURIComponent(`Contacto de Portafolio: ${formData.name}`)
-      const body = encodeURIComponent(
-        `Hola Adrian,\n\nMi nombre es ${formData.name} (${formData.email}).\n\nMensaje:\n${formData.message}`
-      )
-      window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`
-      setFormSubmitted(true)
+      setIsSubmitting(true)
+      const isEs = personalInfo.contact.copied === 'Copiado'
+
+      try {
+        const accessKey =
+          (import.meta as any).env?.VITE_WEB3FORMS_ACCESS_KEY ||
+          'b18f8e8f-7d9a-4c2e-83d1-portfoliodemo'
+
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: accessKey,
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            subject: `Nuevo mensaje de ${formData.name} (Portafolio Adrian Villafan)`,
+            from_name: formData.name,
+          }),
+        })
+
+        const result = await response.json()
+
+        if (result.success) {
+          setFormSubmitted(true)
+          showToast(
+            isEs ? '¡Mensaje enviado con éxito! 🚀' : 'Message sent successfully! 🚀',
+            'success',
+            4000
+          )
+        } else {
+          // Si el access key no está activado aún, fallback limpio y seguro a mailto
+          console.info('Web3Forms response, fallback to mailto:', result)
+          const subject = encodeURIComponent(`Contacto Portafolio: ${formData.name}`)
+          const body = encodeURIComponent(
+            `Hola Adrian,\n\nMi nombre es ${formData.name} (${formData.email}).\n\nMensaje:\n${formData.message}`
+          )
+          window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`
+          setFormSubmitted(true)
+          showToast(
+            isEs
+              ? 'Abriendo cliente de correo para envío seguro ✉️'
+              : 'Opening email client for secure delivery ✉️',
+            'info',
+            3500
+          )
+        }
+      } catch (err) {
+        console.error('Submission network error, fallback to mailto:', err)
+        const subject = encodeURIComponent(`Contacto Portafolio: ${formData.name}`)
+        const body = encodeURIComponent(
+          `Hola Adrian,\n\nMi nombre es ${formData.name} (${formData.email}).\n\nMensaje:\n${formData.message}`
+        )
+        window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`
+        setFormSubmitted(true)
+        showToast(
+          isEs
+            ? 'Abriendo tu cliente de correo ✉️'
+            : 'Opening your email client ✉️',
+          'info',
+          3500
+        )
+      } finally {
+        setIsSubmitting(false)
+      }
     },
-    [formData, personalInfo.email]
+    [formData, personalInfo.email, personalInfo.contact.copied, showToast]
   )
 
   return (
@@ -387,9 +458,24 @@ const Contact: React.FC = () => {
                       size="lg"
                       variant="primary"
                       fullWidth
-                      icon={<FiSend size={16} />}
+                      disabled={isSubmitting}
+                      icon={
+                        isSubmitting ? (
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                            style={{ display: 'inline-flex' }}
+                          >
+                            <FiLoader size={16} />
+                          </motion.div>
+                        ) : (
+                          <FiSend size={16} />
+                        )
+                      }
                     >
-                      {personalInfo.contact.submitButton}
+                      {isSubmitting
+                        ? personalInfo.contact.sendingButton
+                        : personalInfo.contact.submitButton}
                     </Button>
                   </form>
                 )}

@@ -3,9 +3,10 @@ import { useScroll } from '@/context/ScrollContext'
 import { useActiveSection, SectionId } from '@/context/SectionContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useLanguage } from '@/context/LanguageContext'
+import { useToast } from '@/context/ToastContext'
 import { usePortfolioData } from '@/hooks/usePortfolioData'
 import { Button } from './Button'
-import { FiSun, FiMoon, FiMenu, FiX, FiGlobe } from 'react-icons/fi'
+import { FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiFileText } from 'react-icons/fi'
 
 interface NavLink {
   id: SectionId
@@ -17,6 +18,7 @@ export const Navbar: React.FC = React.memo(() => {
   const { activeSection } = useActiveSection()
   const { theme, toggleTheme } = useTheme()
   const { isEnglish, toggleLanguage } = useLanguage()
+  const { showToast } = useToast()
   const data = usePortfolioData()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -154,7 +156,10 @@ export const Navbar: React.FC = React.memo(() => {
         >
           {/* 🌐 Selector de Idioma ES / EN */}
           <button
-            onClick={toggleLanguage}
+            onClick={() => {
+              toggleLanguage()
+              showToast(isEnglish ? 'Idioma cambiado a Español 🇪🇸' : 'Switched to English 🇺🇸', 'info', 2500)
+            }}
             title={isEnglish ? 'Switch to Spanish' : 'Cambiar a Inglés'}
             style={{
               padding: '0.38rem 0.75rem',
@@ -176,7 +181,14 @@ export const Navbar: React.FC = React.memo(() => {
 
           {/* Theme Toggle */}
           <button
-            onClick={toggleTheme}
+            onClick={() => {
+              toggleTheme()
+              showToast(
+                theme === 'dark' ? 'Modo claro activado ☀️' : 'Modo oscuro activado 🌙',
+                'info',
+                2000
+              )
+            }}
             aria-label="Cambiar tema"
             style={{
               width: '38px',
@@ -195,13 +207,45 @@ export const Navbar: React.FC = React.memo(() => {
           </button>
 
           <div className="desktop-cta" style={{ display: 'none' }}>
-            <Button
-              size="sm"
-              variant="primary"
-              onClick={() => handleNavClick('contact')}
-            >
-              {data.nav.talk}
-            </Button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <a
+                href={data.personalInfo.cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  showToast(
+                    isEnglish ? 'Opening Adrian Villafan CV (PDF)... 📄' : 'Abriendo CV de Adrian Villafan (PDF)... 📄',
+                    'info',
+                    2500
+                  )
+                }}
+                style={{
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  padding: '0.38rem 0.75rem',
+                  borderRadius: '9999px',
+                  color: 'var(--text-secondary)',
+                  border: '1px solid var(--border-subtle)',
+                  background: 'var(--pill-bg)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  transition: 'all 0.2s ease',
+                }}
+                title={isEnglish ? 'View CV (PDF)' : 'Ver CV (PDF)'}
+              >
+                <FiFileText size={14} color="var(--accent-light)" />
+                <span>{data.nav.cv}</span>
+              </a>
+
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => handleNavClick('contact')}
+              >
+                {data.nav.talk}
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Menu Hamburger */}
@@ -258,6 +302,37 @@ export const Navbar: React.FC = React.memo(() => {
               {link.label}
             </button>
           ))}
+          <a
+            href={data.personalInfo.cvUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              setMobileMenuOpen(false)
+              showToast(
+                isEnglish ? 'Opening Adrian Villafan CV (PDF)... 📄' : 'Abriendo CV de Adrian Villafan (PDF)... 📄',
+                'info',
+                2500
+              )
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              padding: '0.65rem 1rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border-active)',
+              background: 'var(--pill-bg)',
+              color: 'var(--text-primary)',
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              textAlign: 'center',
+            }}
+          >
+            <FiFileText size={16} color="var(--accent-light)" />
+            <span>{data.personalInfo.heroActions.downloadCv}</span>
+          </a>
+
           <Button
             size="md"
             variant="primary"

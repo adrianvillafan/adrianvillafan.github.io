@@ -3,6 +3,9 @@ import { AppProviders } from '@/context/AppProviders'
 import { Navbar } from '@/components/ui/Navbar'
 import { Footer } from '@/components/ui/Footer'
 import { SectionFallback } from '@/components/ui/SectionFallback'
+import { InteractiveBackground } from '@/components/effects/InteractiveBackground'
+import { CustomCursor } from '@/components/effects/CustomCursor'
+import { InteractiveTerminal } from '@/components/effects/InteractiveTerminal'
 
 // 🔷 MICRO-FRONTENDS: Cada sección se carga bajo demanda (lazy-loaded)
 const Hero = lazy(() => import('@/sections/hero/Hero'))
@@ -17,6 +20,15 @@ function App() {
     <AppProviders>
       {/* Noise texture overlay */}
       <div className="noise-bg" />
+
+      {/* 🌌 Fondo interactivo de constelaciones & spotlight reactivo al cursor */}
+      <InteractiveBackground />
+
+      {/* 🎯 Cursor magnético dinámico con física de resorte */}
+      <CustomCursor />
+
+      {/* 💻 Terminal Unix CLI interactivo embebido */}
+      <InteractiveTerminal />
 
       {/* Fixed Navbar with blur */}
       <Navbar />

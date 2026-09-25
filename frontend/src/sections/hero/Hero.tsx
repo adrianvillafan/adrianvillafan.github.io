@@ -7,13 +7,17 @@ import { Button } from '@/components/ui/Button'
 import { AuroraBackground } from '@/components/effects/AuroraBackground'
 import { GridPattern } from '@/components/effects/GridPattern'
 import { RotatingText } from '@/components/effects/RotatingText'
-import { FiArrowDown, FiCode, FiMail } from 'react-icons/fi'
+import { useToast } from '@/context/ToastContext'
+import { useLanguage } from '@/context/LanguageContext'
+import { FiArrowDown, FiCode, FiMail, FiFileText } from 'react-icons/fi'
 import { FaWhatsapp } from 'react-icons/fa'
 
 const Hero: React.FC = () => {
   const sectionRef = useSectionObserver('hero')
   const { scrollTo } = useScroll()
   const { personalInfo } = usePortfolioData()
+  const { showToast } = useToast()
+  const { isEnglish } = useLanguage()
 
   // Memoizar palabras rotativas
   const words = useMemo(() => personalInfo.rotatingWords, [personalInfo.rotatingWords])
@@ -196,6 +200,22 @@ const Hero: React.FC = () => {
             onClick={() => scrollTo('#contact')}
           >
             {personalInfo.heroActions.contact}
+          </Button>
+
+          <Button
+            size="lg"
+            variant="outline"
+            icon={<FiFileText size={18} color="var(--accent-light)" />}
+            onClick={() => {
+              showToast(
+                isEnglish ? 'Opening Adrian Villafan CV (PDF)... 📄' : 'Abriendo CV de Adrian Villafan (PDF)... 📄',
+                'info',
+                2500
+              )
+              window.open(personalInfo.cvUrl, '_blank')
+            }}
+          >
+            {personalInfo.heroActions.downloadCv}
           </Button>
 
           <Button

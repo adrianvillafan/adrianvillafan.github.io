@@ -22,6 +22,7 @@ export interface PortfolioContentData {
     whatsappUrl: string
     githubUrl: string
     linkedinUrl: string
+    cvUrl: string
     status: string
     heroTagline: string
     heroSpecializedIn: string
@@ -134,6 +135,7 @@ export const portfolioDictionary: Record<Language, PortfolioContentData> = {
       whatsappUrl: 'https://wa.me/51912102577',
       githubUrl: 'https://github.com/adrianvillafan',
       linkedinUrl: 'https://www.linkedin.com/in/adrian-villafan',
+      cvUrl: './cv-adrian-villafan.pdf',
       status: 'Disponible para nuevos proyectos & roles de alto impacto',
       heroTagline:
         'Construyo plataformas web de alto rendimiento, microservicios resilientes y pipelines de datos inteligentes combinando rigor computacional e interfaces modernas.',
@@ -491,6 +493,7 @@ export const portfolioDictionary: Record<Language, PortfolioContentData> = {
       whatsappUrl: 'https://wa.me/51912102577',
       githubUrl: 'https://github.com/adrianvillafan',
       linkedinUrl: 'https://www.linkedin.com/in/adrian-villafan',
+      cvUrl: './cv-adrian-villafan.pdf',
       status: 'Available for new high-impact projects & engineering roles',
       heroTagline:
         'I build high-performance web platforms, resilient microservices, and intelligent data pipelines combining computational rigor with modern user interfaces.',

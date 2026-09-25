@@ -18,14 +18,20 @@ export const Button: React.FC<ButtonProps> = React.memo(
     fullWidth = false,
     className = '',
     style,
+    disabled,
     ...props
   }) => {
     return (
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={disabled ? undefined : { scale: 1.02 }}
+        whileTap={disabled ? undefined : { scale: 0.98 }}
+        disabled={disabled}
         className={`btn-ui btn-${variant} btn-${size} ${fullWidth ? 'btn-full' : ''} ${className}`}
-        style={style as any}
+        style={{
+          ...(style as any),
+          opacity: disabled ? 0.65 : 1,
+          cursor: disabled ? 'not-allowed' : 'pointer',
+        }}
         {...props}
       >
         {children}
