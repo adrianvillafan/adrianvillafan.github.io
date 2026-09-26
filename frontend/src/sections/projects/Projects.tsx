@@ -8,6 +8,7 @@ import { TiltCard } from '@/components/effects/TiltCard'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { ProjectModal } from './ProjectModal'
+import { GitHubActivityDashboard } from '@/components/effects/GitHubActivityDashboard'
 import { FiExternalLink, FiGithub, FiCheckCircle, FiInfo } from 'react-icons/fi'
 
 interface ProjectLabels {
@@ -332,6 +333,9 @@ const Projects: React.FC = () => {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* GitHub Live Stream Activity Dashboard */}
+        <GitHubActivityDashboard />
 
         {/* Modal de detalles arquitectónicos */}
         <ProjectModal project={selectedProject} onClose={handleCloseDetails} />
